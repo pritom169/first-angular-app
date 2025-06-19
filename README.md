@@ -12,3 +12,8 @@ transpiled into JS code, how strict the transpiled code will be, and many more.
 `src/index.html` is loaded when the visitor visits the website, `src/style.css` is the styling file which will
 determine the global styling for the project and `src/main.ts` is the code that will be first executed when the
 applicaiton loads into the browser.
+
+# Compilation Steps
+
+When we run the project, the angular cli transpiles the code into JS. Hence the reason one sees the `main.js`
+into the browser.
