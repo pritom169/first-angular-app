@@ -14,6 +14,6 @@ export class UserComponent {
   selectedUser = DUMMY_USERS[randomIndex];
 
   get imagePath(): string {
-    return `assets/images/${this.selectedUser.avatar}`;
+    return `users/${this.selectedUser.avatar}`;
   }
 }
