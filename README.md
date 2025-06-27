@@ -44,3 +44,29 @@ export class ProductComponent {
   }
 }
 ```
+
+## Event Binding
+
+Event binding in Angular is a mechanism that allows you to capture and respond to user interactions or DOM events within your components. It creates a direct connection between events that occur in the template (like clicks, key presses, or mouse movements) and methods in your component class.
+
+```ts
+export class MyComponent {
+  handleClick() {
+    console.log("Button was clicked!");
+  }
+
+  handleInput(event: Event) {
+    const target = event.target as HTMLInputElement;
+    console.log("User typed:", target.value);
+  }
+}
+```
+
+```ts
+<!-- Template with event binding -->
+<button (click)="handleClick()">Click me</button>
+<input (input)="handleInput($event)" placeholder="Type something">
+<div (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+  Hover over me
+</div>
+```
