@@ -45,6 +45,9 @@ export class ProductComponent {
 }
 ```
 
+Okay, we have showed how to render dynamic events. However that is not enough. What if we need to react to events. Means if I want
+to change some content of the page on the basis of the content. Here comes the event binding.
+
 ## Event Binding
 
 Event binding in Angular is a mechanism that allows you to capture and respond to user interactions or DOM events within your components. It creates a direct connection between events that occur in the template (like clicks, key presses, or mouse movements) and methods in your component class.
@@ -69,4 +72,35 @@ export class MyComponent {
 <div (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
   Hover over me
 </div>
+```
+
+Not let's combine both of them.
+
+### Managing State and Chaning Data
+
+By Combining both of them we can change the the user by every click
+
+```ts
+// user.component.html
+<div>
+    <button (click)="onSelectUser()">
+        <img [src]="imagePath" [alt]="selectedUser.name" />
+        <span>{{ selectedUser.name }}</span>
+    </button>
+</div>
+
+// user.component.ts
+export class UserComponent {
+  selectedUser = DUMMY_USERS[randomIndex];
+
+  get imagePath(): string {
+    return `users/${this.selectedUser.avatar}`;
+  }
+
+  onSelectUser():void {
+    const randomIndex = Math.floor(Math.random() * DUMMY_USERS.length);
+    this.selectedUser = DUMMY_USERS[randomIndex];
+  }
+}
+
 ```
