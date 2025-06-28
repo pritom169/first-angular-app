@@ -303,3 +303,47 @@ In order to catch that in real time so the the TS compliler understand if we mis
 @Input({required: true}) avatar!: string;
 @Input({required: true}) name!: string;
 ```
+
+## Using Signal Inputs
+
+In order to change the the `zone.js` style to `Signal` we need to change couple of things
+in the `user.component.ts` file.
+
+```ts
+// @Input({required: true}) avatar!: string;
+// @Input({required: true}) name!: string;
+avatar = input.required<string>();
+name = input.required<string>();
+
+// get imagePath(): string {
+//  return "users/" + this.avatar;
+// }
+
+imagePath = computed(() => {
+  return "users/" + this.avatar();
+});
+```
+
+> The `input.required<string>()` is a generic inside of TS. Hence we have to declare
+> in `<>`fashion.
+
+> For a computer property, we will declare it just like we did before.
+
+For `user.component.html`, we will do the same thing as we did before. We will add ` ()``
+after all the properties accessed from the  `user.component.ts` file.
+
+```ts
+<div>
+    <button (click)="onSelectUser()">
+        <img [src]="imagePath()" [alt]="name()" />
+        <!--In order to access the signal value, we use parentheses. It gives access to the real signal value.-->
+        <span>{{ name() }}</span>
+    </button>
+</div>
+```
+
+> One thing to keep in mind, this Signal input value with matters inside the component.
+> For this example, we don't have to perform any change in the `app.component.ts` or `app.component.html` files.
+
+However, since there are lot of companies where still the old way of taking inputs
+are still being used, I want to go back to the old style.
