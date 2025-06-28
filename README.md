@@ -107,8 +107,67 @@ export class UserComponent {
 
 ## Angular Change Detection Mechanism
 
-in the previous lecture we learned about states. When the states are being changed in the `user.component.ts`, the change are being reflected in the UI `user.component.html`.
+In the previous lecture we learned about states. When the states are being changed in the `user.component.ts`, the change are being reflected in the UI `user.component.html`.
 
 So when anything changes in the properties, it automatically checks whether the new change is applicable to UI elements. If that is the case, it takes the new snapshot and updates it to the UI.
 
-Angular does all of the automatically. It does that with the help of `zone.js`
+Angular does all of the automatically. It does that with the help of `zone.js`.
+
+This change mechanism of updating the UI has been there since the inception of Angular (Angular 2). However,there is a new mechanism of updating the UI. It is called `signal`
+
+## Signal
+
+Signal is an object that stores a value. It is sort of like a container. When a change occurs, Angular is then able to update the part of the UI that needs updating.
+
+```ts
+import { Component, computed, signal } from "@angular/core"; // Importing signal from Angular core
+import { DUMMY_USERS } from "../dummy-users";
+
+const randomIndex = Math.floor(Math.random() * DUMMY_USERS.length);
+
+@Component({
+  selector: "app-user",
+  standalone: true,
+  templateUrl: "./user.component.html",
+  styleUrl: "./user.component.css",
+})
+export class UserComponent {
+  selectedUser = signal(DUMMY_USERS[randomIndex]); // Using signal to manage the selected user state
+  imagePath = computed(() => `users/${this.selectedUser().avatar}`); // Using computed to derive the image path from the selected user
+
+  // Since we are using signal, we can simply remove the getter and use the signal directly in the template.
+  // get imagePath(): string {
+  // return `users/${this.selectedUser.avatar}`;
+  // }
+
+  onSelectUser(): void {
+    const randomIndex = Math.floor(Math.random() * DUMMY_USERS.length);
+    this.selectedUser.set(DUMMY_USERS[randomIndex]);
+    // this.selectedUser = DUMMY_USERS[randomIndex]; // This line is not needed as
+    // we are using signal to manage state.
+    // In order to update the selected user, we use the set method of the signal.
+  }
+}
+```
+
+```ts
+<div>
+    <button (click)="onSelectUser()">
+        <img [src]="imagePath()" [alt]="selectedUser().name" />
+        <!--In order to access the signal value, we use parentheses. It gives access to the real signal value.-->
+        <span>{{ selectedUser().name }}</span>
+    </button>
+</div>
+```
+
+Look at the above code, when implementing signal we put `()` next to the signal value, just calling
+it as a function. Angular creates a subscription which tells angular that when the signal value is changed, and to update the UI component.
+
+Now let talk about the state chaning mechanism using `Zone.js`. When using `Zone.js` mechanism, the
+Angular sets a invisible zone around the input (a button, or a text field). It looks around all the
+components inside the Angular and checks for all the events changes and updates the components.
+
+When it comes to computed values as mentioned above, angular makes sure only to update the imagePath
+only when something inside the computed values gets updated.
+
+In a nutshell, `signal` allows you to handle the change mechanism in a more fine grained manner.
