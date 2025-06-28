@@ -104,3 +104,11 @@ export class UserComponent {
 }
 
 ```
+
+## Angular Change Detection Mechanism
+
+in the previous lecture we learned about states. When the states are being changed in the `user.component.ts`, the change are being reflected in the UI `user.component.html`.
+
+So when anything changes in the properties, it automatically checks whether the new change is applicable to UI elements. If that is the case, it takes the new snapshot and updates it to the UI.
+
+Angular does all of the automatically. It does that with the help of `zone.js`
