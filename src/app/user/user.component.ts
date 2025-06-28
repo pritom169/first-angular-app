@@ -1,7 +1,4 @@
-import { Component, computed, signal} from '@angular/core'; // Importing signal from Angular core
-import { DUMMY_USERS } from '../dummy-users';
-
-const randomIndex = Math.floor(Math.random() * DUMMY_USERS.length);
+import { Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-user',
@@ -11,19 +8,14 @@ const randomIndex = Math.floor(Math.random() * DUMMY_USERS.length);
 })
 
 export class UserComponent {
-  selectedUser = signal(DUMMY_USERS[randomIndex]); // Using signal to manage the selected user state
-  imagePath = computed(() => `users/${this.selectedUser().avatar}`); // Using computed to derive the image path from the selected user
+  @Input() avatar!: string;
+  @Input() name!: string;
 
-  // Since we are using signal, we can simply remove the getter and use the signal directly in the template.
-  // get imagePath(): string {
-    // return `users/${this.selectedUser.avatar}`;
-  // }
+  get imagePath(): string {
+    return "users/" + this.avatar;
+  }
 
   onSelectUser():void {
-    const randomIndex = Math.floor(Math.random() * DUMMY_USERS.length);
-    this.selectedUser.set(DUMMY_USERS[randomIndex]);
-    // this.selectedUser = DUMMY_USERS[randomIndex]; // This line is not needed as
-    // we are using signal to manage state.
-    // In order to update the selected user, we use the set method of the signal.
+
   }
 }

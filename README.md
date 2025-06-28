@@ -171,3 +171,93 @@ When it comes to computed values as mentioned above, angular makes sure only to 
 only when something inside the computed values gets updated.
 
 In a nutshell, `signal` allows you to handle the change mechanism in a more fine grained manner.
+
+## Defining Component Inputs
+
+Now we want to have a list of users to be shown in the page. In order to do that we need to expose
+our components to others. So we are designing `@Input` decorator.
+
+```ts
+// app.component.ts
+import { Component } from "@angular/core";
+import { HeaderComponent } from "./header/header.component";
+import { UserComponent } from "./user/user.component";
+import { DUMMY_USERS } from "./dummy-users";
+
+@Component({
+  selector: "app-root",
+  imports: [HeaderComponent, UserComponent],
+  templateUrl: "./app.component.html",
+  styleUrl: "./app.component.css",
+  standalone: true,
+})
+export class AppComponent {
+  users = DUMMY_USERS;
+}
+```
+
+> Since need to use the dummy users variable, we will import it as mentioned. As `app.component.html` also needs the dummy users we will declare a variable "users" just to access in html component.
+
+```ts
+// app.component.html
+<app-header/>
+
+<main>
+    <ul id="users">
+        <li>
+            <app-user [avatar] = "users[0].avatar" [name] = "users[0].name"/>
+        </li>
+        <li>
+            <app-user [avatar] = "users[1].avatar" [name] = "users[1].name"/>
+        </li>
+        <li>
+            <app-user [avatar] = "users[2].avatar" [name] = "users[2].name"/>
+        </li>
+        <li>
+            <app-user [avatar] = "users[3].avatar" [name] = "users[3].name"/>
+        </li>
+    </ul>
+</main>
+```
+
+> Here we will use the property binding (notated by []), to display dynamic content.
+
+```ts
+//app.component.ts
+import { Component, Input } from "@angular/core";
+
+@Component({
+  selector: "app-user",
+  standalone: true,
+  templateUrl: "./user.component.html",
+  styleUrl: "./user.component.css",
+})
+export class UserComponent {
+  @Input() avatar!: string;
+  @Input() name!: string;
+
+  get imagePath(): string {
+    return "users/" + this.avatar;
+  }
+
+  onSelectUser(): void {}
+}
+```
+
+> Since, the avatar and the name will be set from outside, we need to set the property decorator
+> as Input. We can do that, by declaring `@Input` at the front of the property. However, when we do
+> that it shows us an error. We can stop the error, just by putting exclamtion (!) next to the variable
+> which says that, `we are absolutely sure there will be data.`
+
+```ts
+//app.component.html
+<div>
+    <button (click)="onSelectUser()">
+        <img [src]="imagePath" [alt]="name" />
+        <!--In order to access the signal value, we use parentheses. It gives access to the real signal value.-->
+        <span>{{ name }}</span>
+    </button>
+</div>
+```
+
+> We are chaning the name and imagePath as they are decorator value declared in `app.component.ts` file.
