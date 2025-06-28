@@ -223,7 +223,7 @@ export class AppComponent {
 > Here we will use the property binding (notated by []), to display dynamic content.
 
 ```ts
-//app.component.ts
+//users.component.ts
 import { Component, Input } from "@angular/core";
 
 @Component({
@@ -250,7 +250,7 @@ export class UserComponent {
 > which says that, `we are absolutely sure there will be data.`
 
 ```ts
-//app.component.html
+//users.component.html
 <div>
     <button (click)="onSelectUser()">
         <img [src]="imagePath" [alt]="name" />
@@ -261,3 +261,45 @@ export class UserComponent {
 ```
 
 > We are chaning the name and imagePath as they are decorator value declared in `app.component.ts` file.
+
+## Required & Optioanl Inputs
+
+As you can see in the `users.component.ts`
+
+```ts
+@Input() avatar!: string;
+@Input() name!: string;
+```
+
+However, if we miss one property in the `app.component.html`, it will just keep that property
+blank.
+
+```ts
+<app-header/>
+
+<main>
+    <ul id="users">
+        <li>
+            <app-user [avatar] = "users[0].avatar" [name] = "users[0].name"/>
+        </li>
+        <li>
+            <app-user [avatar] = "users[1].avatar" [name] = "users[1].name"/>
+        </li>
+        <li>
+            <app-user [avatar] = "users[2].avatar"/>
+        </li>
+        <li>
+            <app-user [avatar] = "users[3].avatar" [name] = "users[3].name"/>
+        </li>
+    </ul>
+</main>
+```
+
+As we can see the third property does not have any name assigned to it. If we now see the redered UI, we will see there is no name for the third user. So we are cheating with Angular.
+
+In order to catch that in real time so the the TS compliler understand if we missed any property, we should add `{required: true}`
+
+```ts
+@Input({required: true}) avatar!: string;
+@Input({required: true}) name!: string;
+```
