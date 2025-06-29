@@ -347,3 +347,101 @@ after all the properties accessed from the  `user.component.ts` file.
 
 However, since there are lot of companies where still the old way of taking inputs
 are still being used, I want to go back to the old style.
+
+## Working with Outputs & Emitting Data
+
+We have built the side menu, where there are many user components. Now when we select
+a user component, the data should go outside. By emitting the data outside of the
+user component, we can dynamically change the app component.
+
+**Output** is a decorator that marks a property as an event-binding target, essentially creating a custom event that parent components can listen to. It transforms a regular property into an event emitter that can broadcast data or notifications to parent components.
+
+**EventEmitter** is a class that provides the actual mechanism for emitting events. It's a specialized implementation of an observable that can emit values over time and allows components to subscribe to those emissions. When you create an EventEmitter, you're essentially creating a communication channel that can send data from child to parent.
+
+```ts
+// user.component.ts
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+
+@Component({
+  selector: "app-user",
+  standalone: true,
+  templateUrl: "./user.component.html",
+  styleUrl: "./user.component.css",
+})
+export class UserComponent {
+  @Input({ required: true }) id!: string;
+  @Input({ required: true }) avatar!: string;
+  @Input({ required: true }) name!: string;
+  @Output() select = new EventEmitter();
+
+  get imagePath(): string {
+    return "users/" + this.avatar;
+  }
+
+  onSelectUser(): void {
+    this.select.emit(this.id);
+  }
+}
+```
+
+> As we can see in the code `@Output() select = new EventEmitter();` is the emitter output variable. It will emit `this.select.emit(this.id)`
+
+```ts
+// app.component.html
+<app-header />
+
+<main>
+  <ul id="users">
+    <li>
+      <app-user
+        [id]="users[0].id"
+        [avatar]="users[0].avatar"
+        [name]="users[0].name"
+        (select)="onSelectUser($event)"
+      />
+    </li>
+    <li>
+      <app-user
+        [id]="users[1].id"
+        [avatar]="users[1].avatar"
+        [name]="users[1].name"
+        (select)="onSelectUser($event)"
+      />
+    </li>
+    <li>
+      <app-user
+        [id]="users[2].id"
+        [avatar]="users[2].avatar"
+        [name]="users[2].name"
+        (select)="onSelectUser($event)"
+      />
+    </li>
+    <li>
+      <app-user
+        [id]="users[3].id"
+        [avatar]="users[3].avatar"
+        [name]="users[3].name"
+        (select)="onSelectUser($event)"
+      />
+    </li>
+  </ul>
+</main>
+```
+
+> (select) is the event binder here.
+
+On select user, the user will emit the id. In the `app.component.ts`,
+it will catch the id via onSelectUser.
+
+$event in Angular is a special variable that represents the event object or data passed when an event is triggered. It's Angular's way of capturing and passing event information from the template to the component method.
+
+```ts
+// app.component.ts
+export class AppComponent {
+  users = DUMMY_USERS;
+
+  onSelectUser(id: string): void {
+    console.log("Selected User ID: ", id);
+  }
+}
+```
