@@ -445,3 +445,31 @@ export class AppComponent {
   }
 }
 ```
+
+## Using Output Function
+
+output (lowercase) in Angular refers to the output signal function introduced in Angular 17+ as part of the new signal-based reactivity system. It's a modern alternative to the class-based @Output() decorator and EventEmitter pattern.
+
+The output() function creates a signal-based event emitter that allows components to emit events to their parents, but using Angular's new signal architecture instead of the traditional decorator approach.
+
+In the `user.component.ts` file, we replace `@Output() select = new EventEmitter();` with ` select = output<string>();` in order to make it `output` compatable.
+
+```ts
+export class UserComponent {
+  @Input({ required: true }) id!: string;
+  @Input({ required: true }) avatar!: string;
+  @Input({ required: true }) name!: string;
+  // @Output() select = new EventEmitter();
+  select = output<string>();
+
+  get imagePath(): string {
+    return "users/" + this.avatar;
+  }
+
+  onSelectUser(): void {
+    this.select.emit(this.id);
+  }
+}
+```
+
+However we will go back to the "@Output" as it mostly complies with `zone.js` format.
