@@ -473,3 +473,19 @@ export class UserComponent {
 ```
 
 However we will go back to the "@Output" as it mostly complies with `zone.js` format.
+
+## Adding Extra Type Information to EventEmitter
+
+As you can see when we used the `select = output<string>();` we specifically mentioned the type of the variable. In our case that is `string`. However, when using @Output decorator we did not mentioned any type.
+
+That leads us to a problem. Inside the `user.component.ts`, in the onSelectUser function if we emit a number instead of string, it will still not show any issue. But
+when we run it, we will find an error as in `app.component.ts`, inside the onSelectUser it is expecting an `integer`.
+
+The solution would be following changes in `user.component.ts`
+
+```ts
+  @Input({required: true}) id!: string;
+  @Input({required: true}) avatar!: string;
+  @Input({required: true}) name!: string;
+  @Output() select = new EventEmitter<string>(); //Just added the string attribute
+```
