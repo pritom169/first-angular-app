@@ -693,3 +693,25 @@ export class UserComponent {
   // Rest of the previous code
 }
 ```
+
+## Outputting List Content
+
+In the `app.component.ts` file, we have statically redered a list, however in real life there can be hundred of elements if not thousand. So we need to reder list dynamically. Here is how we can render a list in dynamic fashion.
+
+```ts
+<app-header />
+
+<main>
+  <ul id="users">
+    @for (user of users; track user.id) {
+    <li>
+      <app-user [user]="user" (select)="onSelectUser($event)" />
+    </li>
+    }
+  </ul>
+
+  <app-tasks [name]="selectedUser ? selectedUser.name : ''" />
+</main>
+```
+
+@for (user of users; track user.id) - This is Angular's new control flow directive that replaces the older \*ngFor. It iterates through an array called users, assigning each individual user object to the variable user during each iteration. The track user.id part is a performance optimization that tells Angular to use the user's ID as a unique identifier - this helps Angular efficiently update the DOM when the list changes by tracking which specific items were added, removed, or reordered rather than re-rendering the entire list.
