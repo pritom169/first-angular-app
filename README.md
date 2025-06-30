@@ -665,3 +665,31 @@ In the `app.component.html`, we should also bind the [user] to the user property
   <app-tasks [name]="selectedUser ? selectedUser.name : ''" />
 </main>
 ```
+
+## Type Aliases and Interfaces
+
+Now we will replace custom type which looks not very nice, we can replace that type aliases or interface.
+
+```ts
+import { Component, Input, Output, EventEmitter, output } from "@angular/core";
+
+// type User = {
+//   id: string;
+//   avatar: string;
+//   name: string;
+// }
+
+interface User {
+  id: string;
+  avatar: string;
+  name: string;
+}
+
+// Rest of the code
+
+export class UserComponent {
+  @Input({ required: true }) user!: User;
+
+  // Rest of the previous code
+}
+```
