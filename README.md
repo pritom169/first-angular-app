@@ -489,3 +489,80 @@ The solution would be following changes in `user.component.ts`
   @Input({required: true}) name!: string;
   @Output() select = new EventEmitter<string>(); //Just added the string attribute
 ```
+
+## Create a Configuarable Component
+
+We will now create a configurable component named as tasks. The responsiblity of this component is very simple. When we click on any names on the side menu, it will show the name.
+
+First we will create a component using the command line `ng g c --skip-tests`. Let's lock in our attention to `tasks` components first. We need a property with an `@Input` decorator name, which needs to be accesible `tasks.component.html`. It also need to serve another purpose, it needs accesible via `app.component.html`.
+
+```ts
+// tasks.component.ts
+import { Component, Input } from "@angular/core";
+
+@Component({
+  selector: "app-tasks",
+  imports: [],
+  templateUrl: "./tasks.component.html",
+  styleUrl: "./tasks.component.css",
+})
+export class TasksComponent {
+  @Input({ required: true }) name!: string;
+}
+```
+
+```ts
+// tasks.component.html
+<p>{{ name }}</p>
+```
+
+`task.component` requirements are completed. Now we somehow need to access the data from `app.component` also. For that, in the import of `app.component.ts` we will import `TaskComponent`.
+
+We also need a variable to store the userID which we will do via
+selectedUserId.
+
+When we click on a certain user, we need to make sure to update
+the user id which we are doing inside onSelectUser.
+
+```ts
+// app.component.ts
+import { Component } from "@angular/core";
+import { HeaderComponent } from "./header/header.component";
+import { UserComponent } from "./user/user.component";
+import { DUMMY_USERS } from "./dummy-users";
+import { TasksComponent } from "./tasks/tasks.component";
+
+@Component({
+  selector: "app-root",
+  imports: [HeaderComponent, UserComponent, TasksComponent],
+  templateUrl: "./app.component.html",
+  styleUrl: "./app.component.css",
+  standalone: true,
+})
+export class AppComponent {
+  users = DUMMY_USERS;
+  selectedUserId: string = "u1";
+
+  get selectedUser() {
+    return this.users.find((user) => user.id === this.selectedUserId)!;
+  }
+
+  onSelectUser(id: string): void {
+    this.selectedUserId = id;
+  }
+}
+```
+
+Now inside the `app.component.html` we need to make sure, when someone selects an user, we show only the name.
+
+```ts
+<app-header />
+
+<main>
+  <ul id="users">
+    <-- The previous codes here-->
+  </ul>
+
+  <app-tasks [name]="selectedUser.name" />
+</main>
+```
