@@ -566,3 +566,39 @@ Now inside the `app.component.html` we need to make sure, when someone selects a
   <app-tasks [name]="selectedUser.name" />
 </main>
 ```
+
+## Working with Potential undefined values
+
+When working with TypeScript inside angular, we should give some attention to what type we are setting for variables.
+
+Let's look at our `tasks.component.ts`, where we have declared name Input. However, the name input can be empty. Hence, we are setting this as Optional.
+
+```ts
+export class TasksComponent {
+  // @Input({required: True}) name!: string;
+  @Input() name?: string;
+}
+```
+
+Also inside the `app.component.ts`, we need to remove the "!", as we are not absolutely whether the find function will return something or not.
+
+```ts
+get selectedUser() {
+    // return this.users.find((user) => user.id === this.selectedUserId)!;
+    return this.users.find((user) => user.id === this.selectedUserId);
+  }
+```
+
+Now comes to the `app.component.html` where we should take care of the selected user value if it is undefined.
+
+```ts
+<app-header />
+
+<main>
+  <ul id="users">
+  <--Rest of the HTML previusly mentioned-->
+  </ul>
+
+  <app-tasks [name]="selectedUser ? selectedUser.name : ' '" />
+</main>
+```
