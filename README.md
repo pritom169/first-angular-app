@@ -602,3 +602,66 @@ Now comes to the `app.component.html` where we should take care of the selected 
   <app-tasks [name]="selectedUser ? selectedUser.name : ' '" />
 </main>
 ```
+
+## Accepting Objects as Inputs and Adding appropiate typing
+
+We have seen Type declaring with TS, however it is not limited to `string`. We can declare custom types also.
+In the `app.component.ts` we will declare user type, and changed the subsequent parameters.
+
+```ts
+export class UserComponent {
+  @Input({ required: true }) user!: {
+    id: string;
+    avatar: string;
+    name: string;
+  };
+  @Output() select = new EventEmitter<string>();
+
+  get imagePath(): string {
+    return "users/" + this.user.avatar;
+  }
+
+  onSelectUser(): void {
+    this.select.emit(this.user.id);
+  }
+}
+```
+
+The `user.component.html` should also reflect.
+
+```ts
+//user.component.html
+<div>
+  <button (click)="onSelectUser()">
+    <img [src]="imagePath" [alt]="user.name" />
+    <!--In order to access the signal value, we use parentheses. It gives access to the real signal value.-->
+    <span>{{ user.name }}</span>
+  </button>
+</div>
+```
+
+In the `app.component.html`, we should also bind the [user] to the user property.
+
+```ts
+//app.component.html
+<app-header />
+
+<main>
+  <ul id="users">
+    <li>
+      <app-user [user]="users[0]" (select)="onSelectUser($event)" />
+    </li>
+    <li>
+      <app-user [user]="users[1]" (select)="onSelectUser($event)" />
+    </li>
+    <li>
+      <app-user [user]="users[2]" (select)="onSelectUser($event)" />
+    </li>
+    <li>
+      <app-user [user]="users[3]" (select)="onSelectUser($event)" />
+    </li>
+  </ul>
+
+  <app-tasks [name]="selectedUser ? selectedUser.name : ''" />
+</main>
+```
