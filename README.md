@@ -715,3 +715,22 @@ In the `app.component.ts` file, we have statically redered a list, however in re
 ```
 
 @for (user of users; track user.id) - This is Angular's new control flow directive that replaces the older \*ngFor. It iterates through an array called users, assigning each individual user object to the variable user during each iteration. The track user.id part is a performance optimization that tells Angular to use the user's ID as a unique identifier - this helps Angular efficiently update the DOM when the list changes by tracking which specific items were added, removed, or reordered rather than re-rendering the entire list.
+
+## Outputting conditional content
+
+In real project we have to render comment on a conditional basis. In this case, there will be no selectedUser initially, however when a user is selected then we can show the user name. Here is the code to implement it.
+
+```ts
+// app.component.html
+
+// Rest of the code mentioned above
+
+  @if (selectedUser) {
+  <app-tasks [name]="selectedUser ? selectedUser.name : ''" />
+  } @else {
+  <p id="fallback">Select a user to see their tasks!</p>
+  }
+</main>
+```
+
+Since, initially there will be no selectedUser, hence we will also make that optional in the `app.component.ts` file.
