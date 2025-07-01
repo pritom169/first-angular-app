@@ -841,7 +841,7 @@ Now let's add the task component as an individual task inside the `tasks.compone
 ```html
 //tasks.component.html
 <section id="tasks">
-  <-- Previious code mentioned above -->
+  <-- Previous code mentioned above -->
   <ul>
     <li>
       <app-task />
@@ -854,4 +854,84 @@ Now let's add the task component as an individual task inside the `tasks.compone
     </li>
   </ul>
 </section>
+```
+
+## Outputting Task Data in the Task Component
+
+We need to filter tasks on the basis of the user ID. For that we need an input inside the task component which will give us the user id. In addition, the id and name should be mandatory as for showing the name and filtering both being both of them is absolutely necessary.
+
+```ts
+// tasks.component.ts
+import { Component, Input } from "@angular/core";
+import { TaskComponent } from "./task/task.component";
+
+@Component({
+  selector: "app-tasks",
+  imports: [TaskComponent],
+  templateUrl: "./tasks.component.html",
+  styleUrl: "./tasks.component.css",
+})
+export class TasksComponent {
+  @Input({ required: true }) userId!: string;
+  @Input({ required: true }) name!: string;
+
+  tasks = [
+    {
+      id: "t1",
+      userId: "u1",
+      title: "Master Angular",
+      summary: "This is the summary of task 1",
+      dueDate: "2025-12-31",
+    },
+    // Rest of the elements
+  ];
+
+  getSelectedUserTasks() {
+    return this.tasks.filter((task) => this.userId === task.userId);
+  }
+}
+```
+
+Now inside the `tasks.component.html` we will replace the static list with for and inside the for we will use getSelectedUserTasks() in order to have the sorted elements.
+
+```ts
+<section id="tasks">
+  <header>
+    <h2>{{ name }}'s Tasks</h2>
+    <menu>
+      <button>Add Task</button>
+    </menu>
+  </header>
+
+  <ul>
+    @for (task of getSelectedUserTasks(); track task.id){" "}
+    {
+      <li>
+        <app-task />
+      </li>
+    }
+  </ul>
+</section>
+```
+
+Now we have to somehow tranfer the data from the `app.component` to `tasks.component`. For that we need to use property binding. Here is the new code for `app.component.html`.
+
+```html
+<app-header />
+
+<main>
+  <ul id="users">
+    @for (user of users; track user.id) {
+    <li>
+      <app-user [user]="user" (select)="onSelectUser($event)" />
+    </li>
+    }
+  </ul>
+
+  @if (selectedUser) {
+  <app-tasks [userId]="selectedUser.id" [name]="selectedUser.name" />
+  } @else {
+  <p id="fallback">Select a user to see their tasks!</p>
+  }
+</main>
 ```

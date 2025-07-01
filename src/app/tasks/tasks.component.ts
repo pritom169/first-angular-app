@@ -9,5 +9,34 @@ import { TaskComponent } from "./task/task.component";
 })
 
 export class TasksComponent {
-  @Input() name?: string;
+  @Input({required: true}) userId!: string;
+  @Input({required: true}) name!: string;
+
+  tasks = [
+    {
+      id: 't1',
+      userId: 'u1',
+      title: 'Master Angular',
+      summary: 'This is the summary of task 1',
+      dueDate: '2025-12-31'
+    },
+    {
+      id: 't2',
+      userId: 'u3',
+      title: 'Build first prototype',
+      summary: 'This is the summary of task 2',
+      dueDate: '2025-12-31'
+    },
+    {
+      id: 't3',
+      userId: 'u2',
+      title: 'Prepare for interview',
+      summary: 'This is the summary of task 3',
+      dueDate: '2025-12-31'
+    }
+  ]
+
+  getSelectedUserTasks() {
+    return this.tasks.filter((task) => this.userId === task.userId);
+  }
 }
