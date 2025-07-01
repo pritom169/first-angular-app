@@ -778,4 +778,80 @@ We have generated list and conditional state using the new way. However, there i
 
 > *ngIf and *ngOr (Structural Directive) - This is the traditional Angular syntax that's been around since early versions. It uses the asterisk prefix and works as a structural directive that adds/removes elements from the DOM.
 
-> When using **ngFor** we need to write the grammar inside the <li> component. When using **ngIf** things become a bit different. Let's take this example, the condition on which if will make it's decision has to be just next to it. If the condition fails, when we need the give the identifier notated by `#` just after semicolon `;`
+> When using **ngFor** we need to write the grammar inside the <li> component. When using **ngIf** things become a bit different. Let's take this example, the condition on which if will make it's decision has to be just next to it. If the condition fails, when we need the give the identifier notated by `#` just after semicolon `;`. The identifier can be an identifier for a <ng-template>
+
+## Adding More Components to the Demo App
+
+Since `*ngIf` and `*ngFor` is the old way of generating conditional statement and generating list, we will not continue with that.
+
+```ts
+// tasks.component.html
+<section id="tasks">
+  <header>
+    <h2>{{ name }}'s Tasks</h2>
+    <menu>
+      <button>Add Task</button>
+    </menu>
+  </header>
+</section>
+```
+
+We have just added some additional functionality, which will allow to add specific tasks for a specific users. Since the look of the code is not quite nice we will add some css from this [link](https://github.com/mschwarzmueller/angular-complete-guide-course-resources/blob/main/code-snapshots/02-essentials/27-conditionally-show-new-task-cmp/src/app/tasks/tasks.component.css)
+
+When the `Add Task` button is pressed, the user will be shown one or more than one tasks. For that we will need a list of tasks inside the `tasks` components.
+
+We will create a task component using `ng g c tasks/task --skip-tests`, which tells angular to create a task component inside the tasks directory.
+
+For the time being, we will just include the styling from this [link](https://github.com/mschwarzmueller/angular-complete-guide-course-resources/blob/main/code-snapshots/02-essentials/27-conditionally-show-new-task-cmp/src/app/tasks/task/task.component.css) for the ´task.component.css´ file.
+
+For ´task.component.html´ file, will keep it simple with the following code
+
+```ts
+//task.component.html
+<article>
+  <h2>TASK TITLE</h2>
+  <time>TIME</time>
+  <p>SUMMARY</p>
+  <p class="actions">
+    <button>Complete</button>
+  </p>
+</article>
+```
+
+As the the whole task component is a created and being styled, we can now import it in the `tasks` component just simply adding it to the imports section inside the `tasks.component.ts` file. The full code has been given just for more refernece.
+
+```ts
+//task.component.html
+import { Component, Input } from "@angular/core";
+import { TaskComponent } from "./task/task.component";
+
+@Component({
+  selector: "app-tasks",
+  imports: [TaskComponent],
+  templateUrl: "./tasks.component.html",
+  styleUrl: "./tasks.component.css",
+})
+export class TasksComponent {
+  @Input() name?: string;
+}
+```
+
+Now let's add the task component as an individual task inside the `tasks.component.html`.
+
+```html
+//tasks.component.html
+<section id="tasks">
+  <-- Previious code mentioned above -->
+  <ul>
+    <li>
+      <app-task />
+    </li>
+    <li>
+      <app-task />
+    </li>
+    <li>
+      <app-task />
+    </li>
+  </ul>
+</section>
+```
