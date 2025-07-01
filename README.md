@@ -734,3 +734,48 @@ In real project we have to render comment on a conditional basis. In this case, 
 ```
 
 Since, initially there will be no selectedUser, hence we will also make that optional in the `app.component.ts` file.
+
+## Legacy Angular using ngFor & ngIf
+
+We have generated list and conditional state using the new way. However, there is an old way of generating list and conditional statement.
+
+1. First we have to import `ngFor` and `ngIf`, in the `app.component.ts` file by writing this line `import { NgFor, NgIf} from '@angular/common';`
+2. Once components has been imported, we also have to add them in @Component decorator inside imports.
+
+```ts
+@Component({
+  selector: 'app-root',
+  imports: [HeaderComponent, UserComponent, TasksComponent, NgFor, NgIf],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
+  standalone: true
+})
+```
+
+3. Here is the full code including **ngFor & nfIf** inside the `app.component.html` file.
+
+```html
+<app-header />
+
+<main>
+  <ul id="users">
+    <!-- @for (user of users; track user.id) { -->
+    <li *ngFor="let user of users">
+      <app-user [user]="user" (select)="onSelectUser($event)" />
+    </li>
+    <!-- } -->
+  </ul>
+
+  <!-- @if (selectedUser) { -->
+  <app-tasks *ngIf="selectedUser; else fallback" [name]="selectedUser!.name" />
+  <!-- } @else { -->
+  <ng-template #fallback>
+    <p id="fallback">Select a user to see their tasks!</p>
+  </ng-template>
+  <!-- } -->
+</main>
+```
+
+> *ngIf and *ngOr (Structural Directive) - This is the traditional Angular syntax that's been around since early versions. It uses the asterisk prefix and works as a structural directive that adds/removes elements from the DOM.
+
+> When using **ngFor** we need to write the grammar inside the <li> component. When using **ngIf** things become a bit different. Let's take this example, the condition on which if will make it's decision has to be just next to it. If the condition fails, when we need the give the identifier notated by `#` just after semicolon `;`
