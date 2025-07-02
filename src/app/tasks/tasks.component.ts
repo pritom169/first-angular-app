@@ -49,4 +49,8 @@ export class TasksComponent {
   onAddNewTask(){
     this.newTaskShown = !this.newTaskShown;
   }
+
+  onCancelTask() {
+    this.newTaskShown = false;
+  }
 }
