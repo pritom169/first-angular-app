@@ -1084,3 +1084,100 @@ Since `app.component.ts` we already have the information about which user is sel
   }
 </main>
 ```
+
+## More Component Communication: Deleting Tasks
+
+Now when complete button is clicked, I want to delete the task from the list. For that we need a `@Output` variable inside `task.component.ts`. Now we also need to design a function which will emit the variable when it is called.
+
+```ts
+// task.component.ts
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { type Task } from "./task.model";
+
+@Component({
+  selector: "app-task",
+  imports: [],
+  templateUrl: "./task.component.html",
+  styleUrl: "./task.component.css",
+})
+export class TaskComponent {
+  @Input({ required: true }) task!: Task;
+  @Output() complete = new EventEmitter<string>();
+
+  onCompleteTask() {
+    this.complete.emit(this.task.id);
+  }
+}
+```
+
+Now when the action button is called, it will call the `onCompleteTask()` funciton.
+
+```ts
+<article>
+  <h2>{{ task.title }}</h2>
+  <time>{{ task.dueDate }}</time>
+  <p>{{ task.summary }}</p>
+  <p class="actions">
+    <button (click)="onCompleteTask()">Complete</button>
+  </p>
+</article>
+```
+
+Since `onCompleteTask()` emits the `complete` variable, it needs to reach the `tasks.component.ts` through `tasks.component.html`, and we can do that via `$event`
+
+```html
+<!-- task.component.html -->
+<section id="tasks">
+  <header>
+    <h2>{{ name }}'s Tasks</h2>
+    <menu>
+      <button>Add Task</button>
+    </menu>
+  </header>
+
+  <ul>
+    @for (task of selectedUserTasks; track task.id) {
+    <li>
+      <app-task [task]="task" (complete)="onCompleteTask($event)" />
+    </li>
+    }
+  </ul>
+</section>
+```
+
+Now the data will come to `tasks.component.ts` and delete the tasks from the array
+
+```ts
+import { Component, Input } from "@angular/core";
+import { TaskComponent } from "./task/task.component";
+
+@Component({
+  selector: "app-tasks",
+  imports: [TaskComponent],
+  templateUrl: "./tasks.component.html",
+  styleUrl: "./tasks.component.css",
+})
+export class TasksComponent {
+  @Input({ required: true }) userId!: string;
+  @Input({ required: true }) name!: string;
+
+  tasks = [
+    {
+      id: "t1",
+      userId: "u1",
+      title: "Master Angular",
+      summary: "This is the summary of task 1",
+      dueDate: "2025-12-31",
+    },
+    // Rest of the elements
+  ];
+
+  get selectedUserTasks() {
+    return this.tasks.filter((task) => this.userId === task.userId);
+  }
+
+  onCompleteTask(id: string) {
+    this.tasks = this.tasks.filter((task) => task.id != id);
+  }
+}
+```
