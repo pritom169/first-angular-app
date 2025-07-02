@@ -992,3 +992,31 @@ Great. We have the total setup for the task, now we need to pass the data to tas
   </ul>
 </section>
 ```
+
+## Storing Data Models in Seperate Files
+
+As we can see both in the `task.component.ts` and `user.component.ts` the customer interface are in the same file, however we need to put them in a seperate file.
+
+The naming convention should be `component-name.model.ts`. Inside the file there should be a export keyword.
+
+Here is the code for `task.model.ts` and `user.model.ts`.
+
+```ts
+// task.model.ts
+export interface Task {
+  id: string;
+  userId: string;
+  title: string;
+  summary: string;
+  dueDate: string;
+}
+```
+
+```ts
+// user.model.ts
+export interface User {
+  id: string;
+  avatar: string;
+  name: string;
+}
+```
