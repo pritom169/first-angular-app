@@ -935,3 +935,60 @@ Now we have to somehow tranfer the data from the `app.component` to `tasks.compo
   }
 </main>
 ```
+
+## Outputting Task in the Task Component
+
+Now we need to show specific task information in each task component. For that we need, a variable inside `task` component.
+
+Without passing every other value, we can create a custom type of interface as Task. Here is the updated code.
+
+```ts
+import { Component, Input } from "@angular/core";
+
+interface Task {
+  id: string;
+  userId: string;
+  title: string;
+  summary: string;
+  dueDate: string;
+}
+
+@Component({
+  selector: "app-task",
+  imports: [],
+  templateUrl: "./task.component.html",
+  styleUrl: "./task.component.css",
+})
+export class TaskComponent {
+  @Input({ required: true }) task!: Task;
+}
+```
+
+Since we have now the task information inside the task component, we can now change the html file.
+
+```ts
+<article>
+  <h2>{{ task.title }}</h2>
+  <time>{{ task.dueDate }}</time>
+  <p>{{ task.summary }}</p>
+  <p class="actions">
+    <button>Complete</button>
+  </p>
+</article>
+```
+
+Great. We have the total setup for the task, now we need to pass the data to task component. For that we will use the property binder inside `tasks.component.html`.
+
+```html
+<!-- tasks.component.html -->
+<section id="tasks">
+  <!-- As usual as the previous code -->
+  <ul>
+    @for (task of getSelectedUserTasks(); track task.id) {
+    <li>
+      <app-task [task]="task" />
+    </li>
+    }
+  </ul>
+</section>
+```
