@@ -1181,3 +1181,15 @@ export class TasksComponent {
   }
 }
 ```
+
+## Creating a conditional redering another component
+
+Now we need to add a new task when "Add Task" button is pressed. Hence we will create a new component as `new-task` and import it in the `tasks.component.ts`.
+
+In the task `tasks.component.ts`, we will keep a flag which will tell us whether to show the dialog or not. In the `tasks.component.ts`, we will the following code at the top for the time being.
+
+```html
+@if (newTaskShown){
+<app-new-task />
+}
+```
