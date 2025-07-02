@@ -1,5 +1,5 @@
 <div>
-  <button (click)="onSelectUser()">
+  <button [class.active]="selected" (click)="onSelectUser()">
     <img [src]="imagePath" [alt]="user.name" />
     <!--In order to access the signal value, we use parentheses. It gives access to the real signal value.-->
     <span>{{ user.name }}</span>

@@ -1020,3 +1020,67 @@ export interface User {
   name: string;
 }
 ```
+
+## Dynamic CSS styling with class binding
+
+Now when we select an user, there is no notation that the user is selected, however when we hover over the list of users we can see a selection color.
+
+In order to keep a selected user fix, we need to bind css style with class.
+
+We will first go to the `user.component.ts` file and declare a Input variable as `selected` which will be boolean type.
+
+```ts
+// user.component.ts
+export class UserComponent {
+  @Input({ required: true }) user!: User;
+  @Input({ required: true }) selected!: boolean;
+  @Output() select = new EventEmitter<string>();
+
+  get imagePath(): string {
+    return "users/" + this.user.avatar;
+  }
+
+  onSelectUser(): void {
+    this.select.emit(this.user.id);
+  }
+}
+```
+
+Now in the `user.components.html` file, we need to bind this **selected** property with a css class. Here is the full code
+
+```html
+<!-- user.component.html -->
+<div>
+  <button [class.active]="selected" (click)="onSelectUser()">
+    <img [src]="imagePath" [alt]="user.name" />
+    <!--In order to access the signal value, we use parentheses. It gives access to the real signal value.-->
+    <span>{{ user.name }}</span>
+  </button>
+</div>
+```
+
+Since `app.component.ts` we already have the information about which user is selected. So in the `app.component.html` file we will bind the **[selected]** property to a boolean. Here is the code,
+
+```html
+<app-header />
+
+<main>
+  <ul id="users">
+    @for (user of users; track user.id) {
+    <li>
+      <app-user
+        [user]="user"
+        [selected]="user.id === selectedUserId"
+        (select)="onSelectUser($event)"
+      />
+    </li>
+    }
+  </ul>
+
+  @if (selectedUser) {
+  <app-tasks [userId]="selectedUser.id" [name]="selectedUser.name" />
+  } @else {
+  <p id="fallback">Select a user to see their tasks!</p>
+  }
+</main>
+```
