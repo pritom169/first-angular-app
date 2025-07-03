@@ -1261,3 +1261,17 @@ export class NewTaskComponent {
   }
 }
 ```
+
+## Signals and Two way binding
+
+Inorder to use signals with already implemented two way binding in the `new-task.component.ts`, you just add signal() around the empty string.
+
+```ts
+// Only the changed part of the code
+export class NewTaskComponent {
+  @Output() cancel = new EventEmitter<void>();
+  enteredTitle = "";
+  enteredSummary = "";
+  enteredDate = "";
+}
+```
