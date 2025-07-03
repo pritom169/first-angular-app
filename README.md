@@ -1193,3 +1193,71 @@ In the task `tasks.component.ts`, we will keep a flag which will tell us whether
 <app-new-task />
 }
 ```
+
+## Using directives and two way binding
+
+We will use two way binding for the form. Here is the template code.
+
+```html
+<div class="backdrop" (click)="onCancel()"></div>
+<dialog open>
+  <h2>Add Task</h2>
+  <form>
+    <p>
+      <label for="title">Title</label>
+      <input type="text" id="title" name="title" [(ngModel)]="enteredTitle" />
+    </p>
+
+    <p>
+      <label for="summary">Summary</label>
+      <textarea
+        id="summary"
+        rows="5"
+        name="summary"
+        [(ngModel)]="enteredTitle"
+      ></textarea>
+    </p>
+
+    <p>
+      <label for="due-date">Due Date</label>
+      <input
+        type="date"
+        id="due-date"
+        name="due-date"
+        [(ngModel)]="enteredTitle"
+      />
+    </p>
+
+    <p class="actions">
+      <button type="button" (click)="onCancel()">Cancel</button>
+      <button type="submit">Create</button>
+    </p>
+  </form>
+</dialog>
+```
+
+Let's talk about ([ngModel]). [(ngModel)] is Angular's two-way data binding syntax that creates a seamless connection between form input elements and component properties. The square brackets [] handle property binding (component to template), while the parentheses () handle event binding (template to component). When combined as [(ngModel)], they create a bidirectional flow where changes in the input field automatically update the component property, and changes to the component property automatically reflect in the input field.
+
+FormsModule from @angular/forms is the Angular module that provides all the necessary directives and services for template-driven forms. It's what makes ngModel and other form-related directives available in your templates. Without importing FormsModule, Angular won't recognize ngModel and will throw an error.
+
+```ts
+import { Component, Output, EventEmitter } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+
+@Component({
+  selector: "app-new-task",
+  imports: [FormsModule],
+  templateUrl: "./new-task.component.html",
+  styleUrl: "./new-task.component.css",
+})
+export class NewTaskComponent {
+  @Output() cancel = new EventEmitter<void>();
+  enteredTitle = "";
+  enteredSummary = "";
+  enteredDate = "";
+
+  onCancel() {
+    this.cancel.emit();
+  }
+}
+```
