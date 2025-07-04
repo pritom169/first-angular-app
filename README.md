@@ -1499,3 +1499,50 @@ export class TasksService {
 - The @Injectable({providedIn: 'root'}) decorator in TasksService tells Angular to create a single, shared instance (singleton) of this service for the whole app.
 
 > Dependency injection (DI) is a design pattern where an object receives (is "injected" with) its dependencies from an external source rather than creating them itself. In Angular, DI is used to provide services and other dependencies to components and other services, making code more modular, testable, and maintainable.
+
+## Saving data into local storage
+
+As we have seen the tasks data stays as it it when we reload the website regardless if we created new task or not. Hoever, we can do that using using localStorage. Here is the code snippet for `task.service.ts`.
+
+```ts
+import { Injectable } from "@angular/core";
+import { NewTaskData } from "./new-task/new-task.model";
+
+@Injectable({ providedIn: "root" })
+export class TasksService {
+  private tasks = [
+    {
+      id: "t1",
+      userId: "u1",
+      title: "Master Angular",
+      summary: "This is the summary of task 1",
+      dueDate: "2025-12-31",
+    },
+  ];
+
+  constructor() {
+    const tasks = localStorage.getItem("tasks");
+    if (tasks) {
+      this.tasks = JSON.parse(tasks);
+    }
+  }
+
+  getUserTasks(userId: string) {
+    return this.tasks.filter((task) => task.userId === userId);
+  }
+
+  addTask(taskData: NewTaskData, userId: string) {
+    // Rest of the code
+    this.saveTasks();
+  }
+
+  removeTask(id: string) {
+    this.tasks = this.tasks.filter((task) => task.id !== id);
+    this.saveTasks();
+  }
+
+  private saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(this.tasks));
+  }
+}
+```
