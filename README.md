@@ -1471,3 +1471,31 @@ class TasksService {
   }
 }
 ```
+
+## Getting started with dependency injection
+
+How the dependey injection is working, we can understand it by looking at the code. Here is the code for `tasks.components.ts` and `tasks.service.ts`.
+
+```ts
+export class TasksComponent {
+  constructor(private tasksService: TasksService) {
+    // Rest of the code stays as it is.
+  }
+}
+```
+
+```ts
+import { Injectable } from "@angular/core";
+import { NewTaskData } from "./new-task/new-task.model";
+
+@Injectable({ providedIn: "root" })
+export class TasksService {
+  // Rest of the code stays as it is
+}
+```
+
+- The TasksService is injected into the component via the constructor.
+- Angular's DI system sees the private tasksService: TasksService parameter and automatically provides an instance of TasksService when it creates the TasksComponent.
+- The @Injectable({providedIn: 'root'}) decorator in TasksService tells Angular to create a single, shared instance (singleton) of this service for the whole app.
+
+> Dependency injection (DI) is a design pattern where an object receives (is "injected" with) its dependencies from an external source rather than creating them itself. In Angular, DI is used to provide services and other dependencies to components and other services, making code more modular, testable, and maintainable.
