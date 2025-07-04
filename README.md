@@ -1355,3 +1355,48 @@ Inside `tasks.component.ts` we will add `onAddNewTask()` which will add the elem
   }
 }
 ```
+
+## Content Projection with ng-content
+
+Let's create a card component using `ng g c --shared/card`. Inside the `card` component, where I copy the following content in the `card.component.css` from `user.component.css`.
+
+```css
+div {
+  border-radius: 6px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+```
+
+In the `card.component.html`, we write the following
+
+```html
+<div>...</div>
+```
+
+Now we wrap `user.component.html` we wrap it with `app-card`
+
+```html
+<app-card>
+  <button [class.active]="selected" (click)="onSelectUser()">
+    <img [src]="imagePath" [alt]="user.name" />
+    <!--In order to access the signal value, we use parentheses. It gives access to the real signal value.-->
+    <span>{{ user.name }}</span>
+  </button>
+</app-card>
+```
+
+We also do the same thing with `task.component.html`. If we do that, we will see nothing in the screen as when we wrap something inside of another angular component, it consumes other component. However, the solution to this is <ng-content>.
+
+ng-content is Angular's content projection mechanism that allows you to create reusable components with customizable content slots. It acts as a placeholder where you can insert content from a parent component into specific locations within a child component's template.
+
+When you use ng-content in a component template, Angular will take any content placed between that component's opening and closing tags and project it into the designated slot. This creates a powerful composition pattern where components can be shells that accept and display dynamic content.
+
+```html
+<!-- card.component.html -->
+<div>
+  <ng-content />
+</div>
+```
+
+Now if you save it, and run the application everything will be just as it was before.
