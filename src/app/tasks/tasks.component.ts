@@ -16,9 +16,7 @@ export class TasksComponent {
   @Input({required: true}) name!: string;
   newTaskShown: boolean = false;
   
-  constructor(private tasksService: TasksService) {
-    
-  }
+  constructor(private tasksService: TasksService) {}
 
   get selectedUserTasks() {
     return this.tasksService.getUserTasks(this.userId);
@@ -28,7 +26,7 @@ export class TasksComponent {
     this.newTaskShown = true;
   }
 
-  onCompleteTask() {
+  onCloseTask() {
     this.newTaskShown = false;
   }
 }
