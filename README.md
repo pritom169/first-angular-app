@@ -1432,3 +1432,42 @@ Now in the same template file we include date with pipe symbol.
   </article>
 </app-card>
 ```
+
+## Getting started with Services
+
+As we can see in the `tasks.components.ts` all the tasks related functions are present. However it is not the best practise. It is always better to keep the component classes as clean as clean as possible. Hence we will outsource all the service related functionality to `tasks.service.ts`.
+
+```ts
+import { NewTaskData } from "./new-task/new-task.model";
+
+class TasksService {
+  private tasks = [
+    {
+      id: "t1",
+      userId: "u1",
+      title: "Master Angular",
+      summary: "This is the summary of task 1",
+      dueDate: "2025-12-31",
+    },
+    // Rest of the tasks
+  ];
+
+  getUserTasks(userId: string) {
+    return this.tasks.filter((task) => task.userId === userId);
+  }
+
+  addTask(taskData: NewTaskData, userId: string) {
+    this.tasks.unshift({
+      id: new Date().getTime().toString(),
+      userId: userId,
+      title: taskData.title,
+      summary: taskData.summary,
+      dueDate: taskData.date,
+    });
+  }
+
+  removeTask(id: string) {
+    this.tasks = this.tasks.filter((task) => task.id !== id);
+  }
+}
+```
