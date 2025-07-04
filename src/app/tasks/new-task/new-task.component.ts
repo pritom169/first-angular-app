@@ -14,6 +14,10 @@ export class NewTaskComponent {
   enteredSummary = '';
   enteredDate = '';
 
+  onSubmit(){
+    
+  }
+
   onCancel() {
     this.cancel.emit(); 
   }

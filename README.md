@@ -1275,3 +1275,21 @@ export class NewTaskComponent {
   enteredDate = "";
 }
 ```
+
+## Handling form submission
+
+If you look at the previous code in the `new-task.component.html` you can see the following line `<button type="submit">Create</button>`. The default behavior of `type="submit"` is that when it is inside the `<form>`it will create an api call to ther service, however we don't have a service. Hence, we have to stop it.
+
+Good thing for us, in Angular if we import [FormsModule] Angular does it for us.
+
+However if we want to submit the information to a service, we need to declare a function. In our case we have declared "onSubmit()" in our component file. In the template, we can see `(ngSubmit)` which is a action binder, and in that we bind "onCancel()" function.
+
+```html
+<div class="backdrop" (click)="onCancel()"></div>
+<dialog open>
+  <h2>Add Task</h2>
+  <form (ngSubmit)="onSubmit()">
+    <!-- Rest of the code -->
+  </form>
+</dialog>
+```
