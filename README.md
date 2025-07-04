@@ -1400,3 +1400,35 @@ When you use ng-content in a component template, Angular will take any content p
 ```
 
 Now if you save it, and run the application everything will be just as it was before.
+
+## Transforming Template Data with Pipes
+
+In the date section, inside TS we can see the date has not been organized properly. We can do that using pipe functionality. First we need to import DatePipe in the `task.component.ts`.
+
+```ts
+import { DatePipe } from '@angular/common';
+
+@Component({
+  selector: 'app-task',
+  imports: [CardComponent, DatePipe],
+  templateUrl: './task.component.html',
+  styleUrl: './task.component.css'
+})
+
+// Rest of the code stays same
+```
+
+Now in the same template file we include date with pipe symbol.
+
+```html
+<app-card>
+  <article>
+    <h2>{{ task.title }}</h2>
+    <time>{{ task.dueDate | date : "fullDate" }}</time>
+    <p>{{ task.summary }}</p>
+    <p class="actions">
+      <button (click)="onCompleteTask()">Complete</button>
+    </p>
+  </article>
+</app-card>
+```
