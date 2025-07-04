@@ -1293,3 +1293,65 @@ However if we want to submit the information to a service, we need to declare a 
   </form>
 </dialog>
 ```
+
+## Using the Submitted Data
+
+Now let's do something for the `onSubmit()` part. When we click on submit, we need to make sure it emits a new property, named `NewTaskData`. Here is the code for explanation from `new-task.component.ts`
+
+```ts
+import { Component, Output, EventEmitter } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { type NewTaskData } from "./new-task.model";
+
+@Component({
+  selector: "app-new-task",
+  imports: [FormsModule],
+  templateUrl: "./new-task.component.html",
+  styleUrl: "./new-task.component.css",
+})
+export class NewTaskComponent {
+  @Output() cancel = new EventEmitter<void>();
+  @Output() add = new EventEmitter<NewTaskData>();
+  enteredTitle = "";
+  enteredSummary = "";
+  enteredDate = "";
+
+  onSubmit() {
+    this.add.emit({
+      title: this.enteredTitle,
+      summary: this.enteredSummary,
+      date: this.enteredDate,
+    });
+  }
+
+  onCancel() {
+    this.cancel.emit();
+  }
+}
+```
+
+Now `new-task.component.ts` will emit the data to `tasks.component.html` file, the onAddNewTask() method will catch the event.
+
+```html
+@if (newTaskShown){
+<app-new-task (cancel)="onCancelAddTask()" (add)="onAddNewTask($event)" />
+}
+<!-- Rest of the code mentioned above -->
+```
+
+Inside `tasks.component.ts` we will add `onAddNewTask()` which will add the elements to the tasks array.
+
+```ts
+// Rest of the previous code
+  onAddNewTask(taskData: NewTaskData){
+    this.tasks.push({
+      id: new Date().getTime().toString(),
+      userId: this.userId,
+      title: taskData.title,
+      summary: taskData.summary,
+      dueDate: taskData.date
+    });
+    this.newTaskShown = false;
+  }
+}
+```
