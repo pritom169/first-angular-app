@@ -1546,3 +1546,41 @@ export class TasksService {
   }
 }
 ```
+
+# Angular Modules
+
+Every Angular module is a TypeScript class decorated with the @NgModule decorator, which contains metadata that tells Angular how to compile and launch the application.
+
+In order to transfer to module based from standalone components, we will first create the module file named `app.module.ts`. Any angular module needs to start with `@NgModule`
+
+```ts
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { AppComponent } from "./app.component";
+import { HeaderComponent } from "./header/header.component";
+import { UserComponent } from "./user/user.component";
+import { TasksComponent } from "./tasks/tasks.component";
+
+@NgModule({
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
+  imports: [BrowserModule, HeaderComponent, UserComponent, TasksComponent],
+})
+export class AppModule {}
+```
+
+- **Declarations**: This array contains the components, directives, and pipes that belong to this module. These are the building blocks that the module owns and can use internally.
+
+- **Imports**: This array specifies other modules whose exported classes are needed by component templates declared in this module. It's how modules communicate and share functionality with each other.
+
+- **Bootstrap**: This property is only used in the root module and identifies the main application view (the root component) that hosts all other app views.
+
+In the `app.component.ts`, since the app component is not standalone component anymore, we will remove the `import`. Now comes the `main.ts` file as it starts when the app start. Here is the updates `main.ts` file
+
+```ts
+import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+
+import { AppModule } from "./app/app.module";
+
+platformBrowserDynamic().bootstrapModule(AppModule);
+```
