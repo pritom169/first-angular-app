@@ -1584,3 +1584,60 @@ import { AppModule } from "./app/app.module";
 
 platformBrowserDynamic().bootstrapModule(AppModule);
 ```
+
+## Transferring Individual Component to Module based component
+
+When we want to transfer individual components from standalone to modular, we need to keep couple of things in mind.
+
+1. If the standalone components does not depends on other components, we can simply do it in one fashion
+
+- We convert the argument standalone from `true` to `false`
+- In the `app.module.ts` we move the component from **imports** to **declarations**.
+
+2. If the standalone components does have dependency on other components, we have to the mentioned process above recursively.
+
+- We convert the argument standalone from `true` to `false`
+- Then we remove the imports statement inside the `@Component` decorator.
+- Now we repeat process 1 and 2 for all the components that we inside the component decorator.
+- At last, we move the component from **imports** to **declarations** in `app.module.ts`.
+
+3. If it is a shared component, we have to take the approach a bit differently.
+
+- We have to create a shared module file.
+- Inside the shared module, we have to put the shared component both in the declarations and in the exports array also.
+- After that we need to include the newly created shared module to the imports array in `app.module.ts`
+
+```ts
+import { NgModule } from "@angular/core";
+import { CardComponent } from "./card/card.component";
+
+@NgModule({
+  declarations: [CardComponent],
+  exports: [CardComponent],
+})
+export class SharedModule {}
+```
+
+4. Here comes the fourth situation. In our course the task module can be it's one standalone module. Hence, in order to serve it, we will create a seperate module in our case `tasks.module.ts`.
+
+- First comes the usual import all the components
+- Inside [declarations] we will include all the components this componets needs.
+- The exports will the the component, this task component will give other modules access to.
+- The imports array will include all the components that are needs for this component and other dependt components to run.
+
+```ts
+import { NgModule } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { TasksComponent } from "./tasks.component";
+import { TaskComponent } from "./task/task.component";
+import { NewTaskComponent } from "./new-task/new-task.component";
+import { SharedModule } from "../shared/shared.module";
+import { CommonModule } from "@angular/common";
+
+@NgModule({
+  declarations: [TasksComponent, TaskComponent, NewTaskComponent],
+  exports: [TasksComponent],
+  imports: [CommonModule, FormsModule, SharedModule],
+})
+export class TaskModule {}
+```
