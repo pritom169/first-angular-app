@@ -1,5 +1,11 @@
 <app-header />
 
 <main>
-  <app-user-input />
+  <app-user-input (invesetmentData)="onSubmitInvestmentData($event)" />
+
+  @if (userInevestmentData) {
+  <p>Pleaes Wait.</p>
+  } @else {
+  <p id="fallback">Please enter your investment data!</p>
+  }
 </main>
