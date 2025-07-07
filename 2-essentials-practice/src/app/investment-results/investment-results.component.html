@@ -1,3 +1,4 @@
+@if (investmentResults && investmentResults.length > 0) {
 <table>
   <thead>
     <tr>
@@ -9,12 +10,17 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let result of results">
+    @for (result of investmentResults; track result.year) {
+    <tr>
       <td>{{ result.year }}</td>
-      <td>{{ result.investmentValue }}</td>
-      <td>{{ result.interestYear }}</td>
-      <td>{{ result.totalInterest }}</td>
-      <td>{{ result.investedCapital }}</td>
+      <td>{{ result.investmentValue | currency : "EUR" }}</td>
+      <td>{{ result.interest | currency : "EUR" }}</td>
+      <td>{{ result.totalInterest | currency : "EUR" }}</td>
+      <td>{{ result.investedCapital | currency : "EUR" }}</td>
     </tr>
+    }
   </tbody>
 </table>
+} @else {
+<p id="fallback">Please enter some values and press `CALCULATE`!</p>
+}
