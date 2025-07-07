@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { InvesmentResult } from './investment-results.model';
-import { UserInput } from '../user-input/user-input.model';
+import { InvestmentResultsService } from './investment-results.service';
 
 @Component({
   selector: 'app-investment-results',
@@ -11,7 +11,13 @@ import { UserInput } from '../user-input/user-input.model';
 })
 
 export class InvestmentResultsComponent {
-  @Input({required: true}) investmentData!: UserInput;
-  investmentResults?: [InvesmentResult]
+  private investmentResultsService = inject(InvestmentResultsService);
 
+  get investmentResults(): InvesmentResult[] {
+    const userInput = this.investmentResultsService.getUserInput();
+    if (!userInput) {
+      return [];
+    }
+    return this.investmentResultsService.calculateInvestmentResults(userInput);
+  }
 }

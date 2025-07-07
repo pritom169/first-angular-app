@@ -1,12 +1,10 @@
 <app-header />
 
 <main>
-  <app-user-input (invesetmentData)="onSubmitInvestmentData($event)" />
+  <app-user-input />
 
   @if (userInevestmentData) {
-  <app-investment-results [investmentData]="userInevestmentData">
-  </app-investment-results
-  >> } @else {
+  <app-investment-results> </app-investment-results>> } @else {
   <p id="fallback">Please enter some values and press `CALCULATE`!</p>
   }
 </main>
