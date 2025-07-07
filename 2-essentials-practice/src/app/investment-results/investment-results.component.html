@@ -1,1 +1,20 @@
-<p>investment-results works!</p>
+<table>
+  <thead>
+    <tr>
+      <th>Year</th>
+      <th>Investment Value</th>
+      <th>Interest (Year)</th>
+      <th>Total Interest</th>
+      <th>Invested Capital</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let result of results">
+      <td>{{ result.year }}</td>
+      <td>{{ result.investmentValue }}</td>
+      <td>{{ result.interestYear }}</td>
+      <td>{{ result.totalInterest }}</td>
+      <td>{{ result.investedCapital }}</td>
+    </tr>
+  </tbody>
+</table>

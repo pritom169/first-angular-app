@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { InvesmentResult } from './investment-results.model';
+import { UserInput } from '../user-input/user-input.model';
 
 @Component({
   selector: 'app-investment-results',
@@ -7,6 +9,9 @@ import { Component } from '@angular/core';
   templateUrl: './investment-results.component.html',
   styleUrl: './investment-results.component.css'
 })
+
 export class InvestmentResultsComponent {
-  
+  @Input({required: true}) investmentData!: UserInput;
+  investmentResults?: [InvesmentResult]
+
 }

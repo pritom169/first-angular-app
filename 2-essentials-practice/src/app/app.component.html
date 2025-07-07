@@ -4,8 +4,9 @@
   <app-user-input (invesetmentData)="onSubmitInvestmentData($event)" />
 
   @if (userInevestmentData) {
-  <p>Pleaes Wait.</p>
-  } @else {
-  <p id="fallback">Please enter your investment data!</p>
+  <app-investment-results [investmentData]="userInevestmentData">
+  </app-investment-results
+  >> } @else {
+  <p id="fallback">Please enter some values and press `CALCULATE`!</p>
   }
 </main>
