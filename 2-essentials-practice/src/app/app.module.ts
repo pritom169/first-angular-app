@@ -12,7 +12,7 @@ import { CurrencyPipe } from "@angular/common";
 @NgModule({
     declarations: [AppComponent, HeaderComponent, UserInputComponent, InvestmentResultsComponent],
     imports: [BrowserModule, FormsModule, CurrencyPipe],
-    bootstrap: [AppComponent],
+    bootstrap: [AppComponent]
 })
 
 export class AppModule {
