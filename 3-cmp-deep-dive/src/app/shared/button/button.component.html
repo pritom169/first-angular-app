@@ -1,2 +1,9 @@
-<span> Submit </span>
-<span class="icon"> → </span>
+<span> <ng-content /> </span>
+<ng-content select=".icon" />
+
+<!-- The content projection in the button component is using Angular's <ng-content> feature to create a flexible, reusable button template.
+
+This creates two "slots" where content can be projected:
+
+1. The first <ng-content /> (without a selector) captures ALL content by default
+2. The second <ng-content select=".icon" /> specifically captures only elements with the CSS class "icon" -->
