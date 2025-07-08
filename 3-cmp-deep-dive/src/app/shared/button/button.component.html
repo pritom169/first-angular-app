@@ -1,9 +1,12 @@
 <span> <ng-content /> </span>
-<ng-content select=".icon" />
+<span class="icon">
+  <ng-content select="icon" />
+</span>
 
-<!-- The content projection in the button component is using Angular's <ng-content> feature to create a flexible, reusable button template.
+<!-- The projection mechanism has been updated to use ngProjectAs instead of CSS classes, which is a more explicit and controlled approach to content projection. -->
+<!-- Angular sees <span ngProjectAs="icon">▸</span> and treats it as having the "icon" identifier
+The <ng-content select="icon" /> captures this content
+The remaining text "Submit" or "Logout" goes to the default <ng-content />
 
-This creates two "slots" where content can be projected:
-
-1. The first <ng-content /> (without a selector) captures ALL content by default
-2. The second <ng-content select=".icon" /> specifically captures only elements with the CSS class "icon" -->
+<span>Submit</span>
+<span class="icon">▸</span> -->
