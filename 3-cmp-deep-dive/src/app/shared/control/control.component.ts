@@ -19,11 +19,11 @@ export class ControlComponent {
   //   console.log('Control clicked!')
   // }
   label = input.required<string>();
-  private el = inject(ElementRef);
+  // private el = inject(ElementRef);
 
   onClick() {
     console.log('Control clicked!');
-    console.log(this.el);
+    // console.log(this.el);
   }
 }
 
