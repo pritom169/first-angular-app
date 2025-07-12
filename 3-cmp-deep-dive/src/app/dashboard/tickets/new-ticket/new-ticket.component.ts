@@ -12,7 +12,7 @@ import { ControlComponent } from "../../../shared/control/control.component";
 })
 
 export class NewTicketComponent {
-  onSubmit(){
-    console.log("Forms have been submitted!");
+  onSubmit(inputElement: HTMLInputElement){
+    console.log(inputElement.value);
   }
 }
