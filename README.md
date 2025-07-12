@@ -1,6 +1,6 @@
 # Angular - A complete guide
 
-This repository is my own documentation for learning Angular from Maximila Schwarzmuller's course from Udemy. Please hop into individual components for more details.
+This repository is my own documentation for learning Angular from Maximilan Schwarzmuller's course from Udemy. Please hop into individual components for more details.
 
 ## 1. Angular Essentials
 
