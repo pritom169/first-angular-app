@@ -11,4 +11,15 @@ import { Ticket } from './tickets.model';
 })
 export class TicketsComponent {
   tickets: Ticket[] = [];
+  
+  onAdd(ticketData: {title: string; text: string}){
+    const ticket: Ticket = {
+      title: ticketData.title,
+      request: ticketData.title,
+      id: Math.random().toString(),
+      status: 'open'
+    }
+
+    this.tickets.push(ticket);
+  }
 }
