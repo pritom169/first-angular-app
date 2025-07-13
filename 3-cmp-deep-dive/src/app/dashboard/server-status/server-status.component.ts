@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, signal, OnInit, inject, effect } from '@angular/core';
 
 @Component({
   selector: 'app-server-status',
@@ -8,7 +8,7 @@ import { Component, DestroyRef, OnDestroy, OnInit, inject } from '@angular/core'
   styleUrl: './server-status.component.css'
 })
 export class ServerStatusComponent implements OnInit{
-  currentStatus: 'online' | 'offline' | 'unknown'  = 'online';
+  currentStatus  = signal<'online' | 'offline' | 'unknown'>('online');
   // injecting the DestroyRef service using Angular’s inject() function
   private destroyRef = inject(DestroyRef);
 
@@ -16,7 +16,10 @@ export class ServerStatusComponent implements OnInit{
   // private interval?: ReturnType<typeof setInterval>;
 
   constructor() {
-    
+    // console.log(this.currentStatus);
+    effect(() => {
+      console.log(this.currentStatus());
+    })
   }
 
   ngOnInit() {
@@ -25,11 +28,11 @@ export class ServerStatusComponent implements OnInit{
     const interval = setInterval(() => {
       const random = Math.random();
       if (random < 0.5) {
-        this.currentStatus = 'online';
+        this.currentStatus.set('online');
       } else if (random < 0.8) {
-        this.currentStatus = 'offline';
+        this.currentStatus.set('offline');
       } else {
-        this.currentStatus = 'unknown';
+        this.currentStatus.set('unknown');
       }
     }, 5000);
 
