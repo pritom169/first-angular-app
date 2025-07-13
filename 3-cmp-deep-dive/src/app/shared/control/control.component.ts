@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, input, HostBinding, HostListener, ElementRef, inject, ContentChild, contentChild, AfterContentInit } from '@angular/core';
+import { Component, ViewEncapsulation, input, HostBinding, HostListener, ElementRef, inject, ContentChild, contentChild, AfterContentInit, afterNextRender, afterRender } from '@angular/core';
 
 @Component({
   selector: 'app-control',
@@ -23,8 +23,21 @@ export class ControlComponent implements AfterContentInit {
   // @ContentChild('input') private control?: ElementRef <HTMLInputElement | HTMLTextAreaElement>;
   private control = contentChild<ElementRef<HTMLInputElement | HTMLTextAreaElement>>('input');
 
+  constructor(){
+    // All the functionalities of after Render are for the whole application not for individual component.
+    // After render executes on all future changes 
+    afterRender(() => {
+      console.log('afterNextrender');
+    })
+
+    // AfterNextRender exectures only on the next change on entire application
+    afterNextRender(() => {
+      console.log('afterRender');
+    })
+  }
+
   ngAfterContentInit(): void {
-    
+    //..
   }
 
   onClick() {
