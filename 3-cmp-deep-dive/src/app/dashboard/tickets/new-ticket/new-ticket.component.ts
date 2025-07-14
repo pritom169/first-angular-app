@@ -18,6 +18,8 @@ export class NewTicketComponent implements AfterViewInit, OnInit {
   // 'form' — matches the #form in the template.
   // Optional (?) means it might not be available at first.
   // ElementRef<T> — gives you access to the actual DOM element.
+  enteredTitle = '';
+  enteredText = '';
   add = output<{title: string; text: string}>();
 
   // private form = viewChild<ElementRef<HTMLFormElement>>('form');
@@ -35,10 +37,12 @@ export class NewTicketComponent implements AfterViewInit, OnInit {
     console.log(this.form?.nativeElement)
   }
 
-  onSubmit(input: string, text: string){
-    this.add.emit({title: input, text: text})
-    this.form?.nativeElement.reset();
+  onSubmit(){
+    this.add.emit({title: this.enteredTitle, text: this.enteredText});
+    // this.form?.nativeElement.reset();
     // Use nativeElement to directly call DOM methods like reset().
     // Safe access with optional chaining (?.) in case it's undefined.
+    this.enteredTitle = '';
+    this.enteredText = '';
   }
 }
