@@ -1,7 +1,29 @@
 # Component Deep Dive
 
-On this part of this tutorial we will deep dive into components
+## Project Setup
 
-## When and How to Split Up Components
+1. Created new dashboard directory structure with components:
 
-The main philosophy of seperating the components are seperation of concerns. In other words, every component should only do on thing.
+   - dashboard/dashboard-item/ - Dashboarditem component
+   - dashboard/server-status/ - Server status component
+   - dashboard/tickets/ - Tickets component
+   - dashboard/traffic/ - Traffic component
+
+2. Created header component:
+
+   - header/ directory with component files
+
+3. Created shared components directory:
+   - shared/button/ - Reusable button component
+   - shared/control/ - Reusable control component
+
+## Project compartmentalization
+
+The whole application has been compartmentalized into
+
+1. HeaderComponent
+2. TrafficComponent
+3. TicketComponent
+4. ServerStatusComponent
+
+In addition those components has also been added to `app.component.html` and imported into `app.component.ts`.
