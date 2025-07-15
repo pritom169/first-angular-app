@@ -162,3 +162,31 @@ The new-code for dashboard item component is here.
 After doing that you can see the, there is a duplication of title and images in the top. In order to solve it, we have to individually go into the `server-status.componenet.html`, `tickets.component.html` and `traffic.component.html`in order to remove the header components.
 
 In a nutshell, ng-content essentially allows you to create "template holes" that parent components can fill with their own content, making your components incredibly flexible and reusable.
+
+## Attribute Selector
+
+If we look at the inspect element, we can see there are multiple nested button elements. It is a completly unnecessary. We can remove that using `attribute selctor`
+
+```ts
+Component({
+  selector: "button[app-button]", // This is the attribute selector
+  // ...
+});
+export class ButtonComponent {}
+```
+
+Breaking down 'button[app-button]':
+
+- button - Must be a <button> element (element selector)
+  [app-button] - Must have the app-button attribute (attribute selector)
+- Combined: Only <button> elements with the app-button attribute will be enhanced by this component
+
+Usage in Template:
+
+- html<button app-button>Login</button>
+  What happens:
+
+- Angular finds the <button> element with app-button attribute
+- It matches the 'button[app-button]' selector
+- Angular enhances this existing button element with the ButtonComponent
+- The button's content is replaced with your component's template
