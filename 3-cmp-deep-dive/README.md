@@ -133,3 +133,32 @@ The whole dashboard component has been incorporated into the app template.
   </div>
 </main>
 ```
+
+## Using Content Project and ng-content
+
+If you run the project in this stage, you cannot see the anything except the header components even though we have incorporate the `app-server-status`, `app-traffic`, and `app-tickets` into the component.
+
+The solution is to use <ng-content>.
+
+### ng-content
+
+ng-content is Angular's content projection mechanism that allows you to create flexible, reusable components by letting parent components inject HTML content into specific slots within a child component's template.
+
+The new-code for dashboard item component is here.
+
+```ts
+//dashboard-item.component.html
+<div class="dashboard-item">
+  <article>
+    <header>
+      <img [src]="image().src" [alt]="image().alt" />
+      <h2>{{ title() }}</h2>
+    </header>
+    <ng-content />
+  </article>
+</div>
+```
+
+After doing that you can see the, there is a duplication of title and images in the top. In order to solve it, we have to individually go into the `server-status.componenet.html`, `tickets.component.html` and `traffic.component.html`in order to remove the header components.
+
+In a nutshell, ng-content essentially allows you to create "template holes" that parent components can fill with their own content, making your components incredibly flexible and reusable.
