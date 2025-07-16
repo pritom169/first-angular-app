@@ -1165,3 +1165,84 @@ ngOnDestroy(): void {
 | `ngDoCheck`       | Avoid unless custom change detection is needed |
 
 ---
+
+## DestroyRef
+
+### 🔥 `DestroyRef` in Angular (introduced in Angular 16+)
+
+`DestroyRef` is a **newer Angular API** that provides a powerful and type-safe way to **register cleanup logic** for a component, directive, or service — without needing to manually implement the `OnDestroy` lifecycle hook.
+
+---
+
+## ✅ What is `DestroyRef`?
+
+`DestroyRef` is a **destruction token** that allows you to:
+
+- Register cleanup callbacks (`onDestroy()`),
+- Know when a context (component, directive, injectable) is destroyed,
+- Replace the need for `ngOnDestroy()` in many cases.
+
+---
+
+## 🧠 Why use `DestroyRef`?
+
+Traditionally, you'd do cleanup like this:
+
+```ts
+@Component({...})
+export class MyComponent implements OnDestroy {
+  ngOnDestroy() {
+    console.log('cleanup logic');
+  }
+}
+```
+
+But with `DestroyRef`, you **don’t need to implement `OnDestroy` manually**. Instead, you can inject `DestroyRef` and register a teardown callback.
+
+---
+
+## 🔧 How to use `DestroyRef`
+
+### ✅ In Components or Directives
+
+```ts
+import { Component, inject, DestroyRef } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+
+@Component({
+  selector: "app-my",
+  standalone: true,
+  template: `<p>Hello!</p>`,
+})
+export class MyComponent {
+  destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.destroyRef.onDestroy(() => {
+      console.log("Component destroyed!");
+    });
+  }
+}
+```
+
+---
+
+## 🔄 `DestroyRef` vs `ngOnDestroy`
+
+| Feature       | `DestroyRef`                        | `ngOnDestroy()`            |
+| ------------- | ----------------------------------- | -------------------------- |
+| Code coupling | Decouples cleanup from class        | Requires class method      |
+| Composition   | Easy to register multiple callbacks | Harder in nested setups    |
+| RxJS support  | Built-in `takeUntilDestroyed()`     | Needs custom Subject logic |
+| Available in  | Angular 16+                         | All versions               |
+
+---
+
+## 🧱 Use Cases
+
+- ✅ Cleanup timers / intervals
+- ✅ Auto-unsubscribe from Observables
+- ✅ Dispose of services, sockets, DOM listeners
+- ✅ Works in **signals**, **injectables**, and **effects**
+
+---
