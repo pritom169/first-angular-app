@@ -190,3 +190,90 @@ Usage in Template:
 - It matches the 'button[app-button]' selector
 - Angular enhances this existing button element with the ButtonComponent
 - The button's content is replaced with your component's template
+
+## **Component Template (Multi-Slot Projection):**
+
+```html
+<!-- button.component.html -->
+<span> <ng-content /> </span>
+<!-- Default slot for text -->
+<ng-content select=".icon" />
+<!-- Specific slot for icons -->
+```
+
+**Two projection slots:**
+
+1. **Default slot**: `<ng-content />` - catches any content without specific selectors
+2. **Icon slot**: `<ng-content select=".icon" />` - specifically targets elements with `class="icon"`
+
+## **Usage Examples:**
+
+### **Header Component:**
+
+```html
+<button app-button>
+  Logout
+  <!-- Goes to default slot -->
+  <span class="icon"> ▸ </span>
+  <!-- Goes to .icon slot -->
+</button>
+```
+
+**Rendered Result:**
+
+```html
+<button app-button>
+  <span> Logout </span>
+  <!-- Default content wrapped in span -->
+  <span class="icon"> ▸ </span>
+  <!-- Icon content projected as-is -->
+</button>
+```
+
+**Rendered Result:**
+
+```html
+<button app-button>
+  <span> Submit </span>
+  <!-- Default content wrapped in span -->
+  <span class="icon">→</span>
+  <!-- Icon content projected as-is -->
+</button>
+```
+
+### **How Content Projection Works Here:**
+
+#### **1. Selection Process:**
+
+- Angular scans the content inside `<button app-button>...</button>`
+- Content with `class="icon"` → goes to `<ng-content select=".icon" />`
+- Everything else → goes to the default `<ng-content />`
+
+### **2. Rendering Order:**
+
+The component template determines the final order:
+
+1. First: Default content (wrapped in `<span>`)
+2. Second: Icon content (projected as-is)
+
+### **3. Flexible Usage:**
+
+You can use the button with different content:
+
+```html
+<!-- Just text -->
+<button app-button>Save</button>
+
+<!-- Text with icon -->
+<button app-button>
+  Delete
+  <span class="icon">🗑️</span>
+</button>
+
+<!-- Multiple icons (all will be projected) -->
+<button app-button>
+  Upload
+  <span class="icon">📁</span>
+  <span class="icon">⬆️</span>
+</button>
+```
