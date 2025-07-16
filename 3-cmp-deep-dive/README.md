@@ -414,3 +414,194 @@ If you need to change the projection selector, you only change the component:
 <!-- To: -->
 <span slot="icon">→</span>
 ```
+
+## Multi-Element Custom Components & Content Projection
+
+### **Component Definition:**
+
+```typescript
+// control.component.ts
+export class ControlComponent {
+  label = input.required<string>(); // Signal input for the label text
+}
+```
+
+### **Component Template:**
+
+```html
+<!-- control.component.html -->
+<p>
+  <label>{{ label() }}</label>
+  <ng-content select="input, textarea" />
+  <!-- Projects input OR textarea -->
+</p>
+```
+
+**Key points:**
+
+- `{{ label() }}` displays the label text from the signal input
+- `select="input, textarea"` specifically targets `<input>` and `<textarea>` elements
+- Wraps everything in a `<p>` for consistent form styling
+
+## **Usage in NewTicketComponent:**
+
+### **Text Input:**
+
+```html
+<app-control label="Title">
+  <input name="title" id="title" />
+</app-control>
+```
+
+**Rendered Result:**
+
+```html
+<p>
+  <label>Title</label>
+  <input name="title" id="title" />
+</p>
+```
+
+### **Textarea:**
+
+```html
+<app-control label="Description">
+  <textarea name="description" id="description" rows="3"></textarea>
+</app-control>
+```
+
+**Rendered Result:**
+
+```html
+<p>
+  <label>Description</label>
+  <textarea name="description" id="description" rows="3"></textarea>
+</p>
+```
+
+## **Content Projection Benefits Here:**
+
+### **1. Flexible Input Types**
+
+The `select="input, textarea"` selector allows the component to work with different form elements:
+
+```html
+<!-- All of these work -->
+<app-control label="Name">
+  <input type="text" />
+</app-control>
+
+<app-control label="Email">
+  <input type="email" />
+</app-control>
+
+<app-control label="Password">
+  <input type="password" />
+</app-control>
+
+<app-control label="Comments">
+  <textarea rows="5"></textarea>
+</app-control>
+```
+
+### **2. Maintains Form Element Attributes**
+
+The actual `<input>` or `<textarea>` keeps all its native attributes:
+
+```html
+<app-control label="Phone">
+  <input
+    type="tel"
+    name="phone"
+    id="phone"
+    required
+    pattern="[0-9]{10}"
+    placeholder="1234567890"
+  />
+</app-control>
+```
+
+### **3. Consistent Form Layout**
+
+Every form control gets the same structure:
+
+- Consistent `<p>` wrapper
+- Label always comes first
+- Input/textarea always comes second
+
+### **4. Reusable Form Pattern**
+
+Instead of repeating this pattern everywhere:
+
+```html
+<!-- Without ControlComponent - repetitive -->
+<p><label>Title</label><input name="title" /></p>
+<p><label>Description</label><textarea name="description"></textarea></p>
+<p><label>Email</label><input type="email" name="email" /></p>
+```
+
+You get this clean, reusable pattern:
+
+```html
+<!-- With ControlComponent - clean and consistent -->
+<app-control label="Title">
+  <input name="title" />
+</app-control>
+<app-control label="Description">
+  <textarea name="description"></textarea>
+</app-control>
+<app-control label="Email">
+  <input type="email" name="email" />
+</app-control>
+```
+
+## **Why This Pattern Works Well:**
+
+### **1. Semantic Preservation**
+
+The projected `<input>` and `<textarea>` elements maintain their semantic meaning and accessibility features.
+
+### **2. Form Integration**
+
+Native form elements work seamlessly with:
+
+- Form validation
+- Form submission
+- Browser autofill
+- Screen readers
+
+### **3. Styling Control**
+
+The component can apply consistent styling to the wrapper while allowing customization of individual inputs:
+
+```css
+/* control.component.css - affects all controls */
+p {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+```
+
+### **4. Extensibility**
+
+You could easily extend this pattern:
+
+```html
+<!-- control.component.html - enhanced version -->
+<p>
+  <label>{{ label() }}</label>
+  <ng-content select="input, textarea, select" />
+  <!-- Add select support -->
+  <ng-content select=".help-text" />
+  <!-- Add help text slot -->
+  <ng-content select=".error" />
+  <!-- Add error message slot -->
+</p>
+```
+
+This `ControlComponent` demonstrates how content projection creates **composable, reusable UI patterns** that enhance developer experience while maintaining the flexibility and semantic correctness of native HTML elements.
