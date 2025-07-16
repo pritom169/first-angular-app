@@ -843,3 +843,62 @@ Why it matters:
 - This avoids constructor injection boilerplate.
 
 - ElementRef lets you access low-level DOM APIs (e.g. for measuring, styling).
+
+## Angular Class Binding
+
+### ✅ What is Angular Class Binding?
+
+**Class binding** lets you **add or remove CSS classes dynamically** based on conditions in your component.
+
+---
+
+### 🧩 Syntax:
+
+```html
+<div [class.className]="condition"></div>
+```
+
+➡️ Adds `className` to the element **if `condition` is true**.
+
+---
+
+### 🧠 Why Use It?
+
+- To apply styles based on component state (`isActive`, `status`, etc.)
+- Keeps templates clean and reactive
+- No need to manually toggle classes in TS
+
+---
+
+### 🔥 Example:
+
+```html
+<div [class.error]="hasError">Error!</div>
+```
+
+✅ If `hasError = true`, then HTML becomes:
+
+```html
+<div class="error">Error!</div>
+```
+
+❌ If `hasError = false`, no class is added.
+
+---
+
+Here is the code from `server-status.component.html`,
+
+```html
+<div [class.status]="currentStatus === 'online'">
+  @if (currentStatus === 'online') {
+  <p>Servers are online</p>
+  <p>All systems are operational.</p>
+  } @else if (currentStatus === 'offline') {
+  <p>Servers are offline</p>
+  <p>Functionality should be restored soon.</p>
+  } @else {
+  <p>Server status is unknown</p>
+  <p>Fetching server status failed.</p>
+  }
+</div>
+```
