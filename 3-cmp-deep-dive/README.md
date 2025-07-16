@@ -659,11 +659,7 @@ As a result, the content which will be projected in the place of <ng-content> wi
 
 ## Component Host Elements
 
-Absolutely — let’s dive deeper into the **`:host`** concept in Angular, as it’s crucial when building **encapsulated, reusable components** with Angular’s **View Encapsulation** model.
-
----
-
-## 🔸 What is `:host` in Angular?
+### 🔸 What is `:host` in Angular?
 
 In Angular, `:host` is a **CSS selector** that refers to the **element in the parent template** where the **component is applied** — i.e., the **host element** of the component.
 
@@ -677,7 +673,7 @@ If you’re writing CSS inside a component's style file (or inside `styles` of `
 
 ---
 
-## 🔍 Context: What is the Host Element?
+### 🔍 Context: What is the Host Element?
 
 > The **host element** is the element in the parent DOM tree that represents the component.
 
@@ -705,9 +701,9 @@ Here:
 
 ---
 
-## 🎯 Use Cases of `:host`
+### 🎯 Use Cases of `:host`
 
-### ✅ 1. **Styling the host element itself**
+#### ✅ 1. **Styling the host element itself**
 
 ```css
 :host {
@@ -719,7 +715,7 @@ Here:
 
 This makes sure that the element (`<button app-button>`) gets styled even though you're not directly styling `button`.
 
-### ✅ 2. **State-based styling like hover or focus**
+#### ✅ 2. **State-based styling like hover or focus**
 
 ```css
 :host:hover {
@@ -729,7 +725,7 @@ This makes sure that the element (`<button app-button>`) gets styled even though
 
 Means: when the user hovers over the host element (`<button app-button>`), apply this style.
 
-### ✅ 3. **Style projected content inside the host**
+#### ✅ 3. **Style projected content inside the host**
 
 This one is very relevant in your case:
 
@@ -743,13 +739,13 @@ This combines host state (`hover`) with inner content (`.icon`), giving nice con
 
 ---
 
-## 🛡️ Why Not Just Use `button:hover .icon`?
+### 🛡️ Why Not Just Use `button:hover .icon`?
 
 Because Angular **encapsulates component styles**, normal selectors like `button:hover .icon` won’t affect the **host element** itself. Angular adds unique attributes (e.g., `_nghost`, `_ngcontent`) to scope styles. That’s why you need `:host`.
 
 ---
 
-## 🧱 `:host` vs. Other Selectors
+### 🧱 `:host` vs. Other Selectors
 
 | Selector            | Targets                          | Used For                                         |
 | ------------------- | -------------------------------- | ------------------------------------------------ |
@@ -760,10 +756,30 @@ Because Angular **encapsulates component styles**, normal selectors like `button
 
 ---
 
-## 🔁 Summary: Why Use `:host`?
+### 🔁 Summary: Why Use `:host`?
 
 - It’s the only way to style the host element _from within the component_.
 - Makes your component **encapsulated** but **interactive** with the outside.
 - Enables clean API design: the outside world controls class names/attributes; the component handles logic and style.
 
 ---
+
+## More Host Component Styling
+
+In the `control.component.ts` we can see the label and inputs which has been encapsulated into a p-tag. As a result, in the browser it creates an unnecesarry DOM element inside the <app-control>.
+
+```html
+<p>
+  <label>{{ label() }}</label>
+  <ng-content select="input, textarea" />
+</p>
+```
+
+If we remove the p-tag, the styling gets lost. However we can still continue styling by styling the host. Here is the new code
+
+```html
+<!-- new-ticket.component.html -->
+<app-control class="control" [label]="'Description'">
+  <textarea name="description" id="description" rows="3"></textarea>
+</app-control>
+```
