@@ -277,3 +277,140 @@ You can use the button with different content:
   <span class="icon">⬆️</span>
 </button>
 ```
+
+## Advanced Content Projection using ngProjectAs
+
+### **What Changed:**
+
+### **Before (CSS class selector):**
+
+```html
+<!-- Component template -->
+<ng-content select=".icon" />
+
+<!-- Usage -->
+<span class="icon">→</span>
+```
+
+### **After (ngProjectAs):**
+
+```html
+<!-- Component template -->
+<ng-content select=".icon" />
+
+<!-- Usage -->
+<span ngProjectAs="icon">→</span>
+```
+
+## **Key Benefits of ngProjectAs:**
+
+### **1. Separation of Concerns**
+
+**CSS classes** should be for styling, **ngProjectAs** should be for content organization:
+
+```html
+<!-- With CSS class - mixing concerns -->
+<span class="icon primary-color large">→</span>
+<!-- Is "icon" for styling or projection? Confusing! -->
+
+<!-- With ngProjectAs - clear separation -->
+<span ngProjectAs="icon" class="primary-color large">→</span>
+<!-- Clear: ngProjectAs=projection, class=styling -->
+```
+
+### **2. Prevents CSS Conflicts**
+
+Using CSS classes for projection can cause unintended styling issues:
+
+```css
+/* If you have this CSS rule */
+.icon {
+  display: block;
+  font-size: 20px;
+  color: red;
+}
+```
+
+**With class selector:**
+
+```html
+<span class="icon">→</span>
+<!-- Gets the CSS styling automatically -->
+```
+
+**With ngProjectAs:**
+
+```html
+<span ngProjectAs="icon">→</span>
+<!-- No automatic CSS styling -->
+```
+
+### **3. More Flexible Content Types**
+
+`ngProjectAs` works with any element type, not just those that can have the specific class:
+
+```html
+<!-- These all project to the same slot -->
+<span ngProjectAs="icon">→</span>
+<i ngProjectAs="icon">→</i>
+<img ngProjectAs="icon" src="arrow.png" />
+<svg ngProjectAs="icon">...</svg>
+
+<!-- vs CSS class approach where you'd need: -->
+<span class="icon">→</span>
+<i class="icon">→</i>
+<img class="icon" src="arrow.png" />
+<!-- Might conflict with image styles -->
+```
+
+### **4. Clear Intent and Readability**
+
+`ngProjectAs` makes the projection intent explicit:
+
+```html
+<!-- Clear projection intent -->
+<button app-button>
+  Save Document
+  <span ngProjectAs="icon">💾</span>
+  <span ngProjectAs="badge">New</span>
+</button>
+
+<!-- vs CSS classes where intent is less clear -->
+<button app-button>
+  Save Document
+  <span class="icon">💾</span>
+  <span class="badge">New</span>
+  <!-- Is this for styling or projection? -->
+</button>
+```
+
+### **5. Component Template Control**
+
+Your component can now fully control the styling of projected content:
+
+```html
+<!-- button.component.html -->
+<span> <ng-content /> </span>
+<span class="icon"> <ng-content select=".icon" /> </span>
+<!--      ↑ Component applies icon styling, not the projected content -->
+```
+
+**Result:**
+
+- The component wraps icon content in a `<span class="icon">`
+- The projected content doesn't need any styling classes
+- Consistent icon styling across all button instances
+
+### **6. Better Maintainability**
+
+If you need to change the projection selector, you only change the component:
+
+```html
+<!-- Change from .icon to [slot="icon"] -->
+<ng-content select="[slot='icon']" />
+
+<!-- Usage changes from: -->
+<span ngProjectAs="icon">→</span>
+<!-- To: -->
+<span slot="icon">→</span>
+```
