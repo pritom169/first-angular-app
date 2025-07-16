@@ -802,3 +802,44 @@ As you can see in the host component styling example, in the parenet component i
   }
 })
 ```
+
+## Accessing Host element Programmatically
+
+If we want to get access to the component's host DOM element, we can do it programatically.
+
+```ts
+//control.component.ts
+@Component({
+  selector: "app-control",
+  imports: [],
+  standalone: true,
+  templateUrl: "./control.component.html",
+  styleUrl: "./control.component.css",
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    class: "control",
+    "(click)": "onClick()",
+  },
+})
+export class ControlComponent {
+  label = input.required<string>();
+  private el = inject(ElementRef);
+
+  onClick() {
+    console.log(`Control clicked`);
+    console.log(this.el);
+  }
+}
+```
+
+Concepts:
+
+- inject() is the function-based DI (dependency injection) syntax.
+
+- ElementRef gives direct access to the component's host DOM element.
+
+Why it matters:
+
+- This avoids constructor injection boilerplate.
+
+- ElementRef lets you access low-level DOM APIs (e.g. for measuring, styling).
