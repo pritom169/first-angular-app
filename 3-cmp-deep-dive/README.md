@@ -902,3 +902,29 @@ Here is the code from `server-status.component.html`,
   }
 </div>
 ```
+
+## Object-based class binding
+
+Here is the example of Object-based class binding.
+
+```html
+<div
+  [class]="{
+    status: true,
+    'status-online': currentStatus === 'online',
+    'status-offline': currentStatus === 'offline',
+    'status-unknown': currentStatus === 'unknown'
+  }"
+>
+  <!-- Rest of the code -->
+</div>
+```
+
+In browser it would be generated as
+
+```html
+<div class="status status-online">
+  <p>Servers are online</p>
+  <p>All systems are operational.</p>
+</div>
+```
