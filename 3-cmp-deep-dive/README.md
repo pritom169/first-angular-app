@@ -783,3 +783,22 @@ If we remove the p-tag, the styling gets lost. However we can still continue sty
   <textarea name="description" id="description" rows="3"></textarea>
 </app-control>
 ```
+
+## Host component styling inside the component.
+
+As you can see in the host component styling example, in the parenet component inside the <app-control> we have to include `class="control"` which we can easily forget. However, we can remove that and put the attribute inside the @Component decorator.
+
+```ts
+//control.component.ts
+@Component({
+  selector: 'app-control',
+  imports: [],
+  standalone: true,
+  templateUrl: './control.component.html',
+  styleUrl: './control.component.css',
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    class: 'control'
+  }
+})
+```
