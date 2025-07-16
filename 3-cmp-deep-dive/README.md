@@ -974,3 +974,194 @@ export class ServerStatusComponent implements OnInit {
   // Rest of the code goes here
 }
 ```
+
+## ✅ Lifecycle Hooks
+
+Angular components go through a lifecycle — from **creation**, to **rendering**, to **updating**, and finally to **destruction**. Angular provides **lifecycle hook interfaces** and methods to let you tap into these phases and execute custom logic at each step.
+
+---
+
+### 📘 Lifecycle Hook Sequence
+
+Here is the typical **order of lifecycle hooks** for a component:
+
+```bash
+constructor
+ngOnChanges
+ngOnInit
+ngDoCheck
+ngAfterContentInit
+ngAfterContentChecked
+ngAfterViewInit
+ngAfterViewChecked
+ngOnDestroy
+```
+
+Let's break them down in detail 👇
+
+---
+
+### 🔹 1. `constructor()`
+
+- **Called**: When the class is instantiated.
+- **Use it for**: Basic dependency injection, not for component logic or DOM interaction.
+- **Avoid**: Accessing `@Input()` properties or manipulating DOM.
+
+```ts
+constructor(private service: MyService) {
+  console.log('Constructor called');
+}
+```
+
+---
+
+### 🔹 2. `ngOnChanges(changes: SimpleChanges)`
+
+- **Interface**: `OnChanges`
+- **Called**: Every time `@Input()` properties change, **even before `ngOnInit()`**.
+- **Use it for**: Reacting to changes in input-bound properties.
+
+```ts
+ngOnChanges(changes: SimpleChanges): void {
+  console.log('OnChanges', changes);
+}
+```
+
+> ✅ Called multiple times in the component’s lifetime if inputs change.
+
+---
+
+### 🔹 3. `ngOnInit()`
+
+- **Interface**: `OnInit`
+- **Called**: Once, after the first `ngOnChanges()`.
+- **Use it for**: Initialization logic, data fetching, `@Input()` processing.
+
+```ts
+ngOnInit(): void {
+  console.log('Component initialized');
+}
+```
+
+> ✅ Best place to do setup after inputs are set but before rendering.
+
+---
+
+### 🔹 4. `ngDoCheck()`
+
+- **Interface**: `DoCheck`
+- **Called**: During every change detection run.
+- **Use it for**: Custom change detection logic.
+
+```ts
+ngDoCheck(): void {
+  console.log('DoCheck - custom change detection');
+}
+```
+
+> ⚠️ Use sparingly. Can cause performance issues if overused.
+
+---
+
+### 🔹 5. `ngAfterContentInit()`
+
+- **Interface**: `AfterContentInit`
+- **Called**: Once, after Angular projects external content (`<ng-content>`).
+- **Use it for**: Initialization dependent on projected content.
+
+```ts
+ngAfterContentInit(): void {
+  console.log('AfterContentInit');
+}
+```
+
+---
+
+### 🔹 6. `ngAfterContentChecked()`
+
+- **Interface**: `AfterContentChecked`
+- **Called**: Every time the projected content is checked.
+- **Use it for**: Responding to changes in projected content.
+
+```ts
+ngAfterContentChecked(): void {
+  console.log('AfterContentChecked');
+}
+```
+
+---
+
+### 🔹 7. `ngAfterViewInit()`
+
+- **Interface**: `AfterViewInit`
+- **Called**: Once, after component's view (and child views) has been initialized.
+- **Use it for**: DOM access via `@ViewChild()` or `@ViewChildren`.
+
+```ts
+@ViewChild('inputEl') inputEl!: ElementRef;
+
+ngAfterViewInit(): void {
+  this.inputEl.nativeElement.focus();
+}
+```
+
+---
+
+### 🔹 8. `ngAfterViewChecked()`
+
+- **Interface**: `AfterViewChecked`
+- **Called**: After every check of the component’s view.
+- **Use it for**: Responding to changes in the view.
+
+```ts
+ngAfterViewChecked(): void {
+  console.log('AfterViewChecked');
+}
+```
+
+> ⚠️ Avoid DOM manipulations here unless necessary. Can run often.
+
+---
+
+### 🔹 9. `ngOnDestroy()`
+
+- **Interface**: `OnDestroy`
+- **Called**: Just before Angular destroys the component.
+- **Use it for**: Cleanup (unsubscribe, detach event handlers, clear intervals).
+
+```ts
+ngOnDestroy(): void {
+  this.subscription.unsubscribe();
+  console.log('Component destroyed');
+}
+```
+
+---
+
+### 🔁 Lifecycle Hook Call Chart
+
+```plaintext
+(1) constructor
+(2) ngOnChanges (if @Input)
+(3) ngOnInit
+(4) ngDoCheck
+(5) ngAfterContentInit
+(6) ngAfterContentChecked
+(7) ngAfterViewInit
+(8) ngAfterViewChecked
+(9) ngOnDestroy (on destroy)
+```
+
+---
+
+### ✅ Best Practices
+
+| Lifecycle Hook    | Best Practice                                  |
+| ----------------- | ---------------------------------------------- |
+| `ngOnInit`        | Use for component setup, API calls             |
+| `ngOnChanges`     | Track changes to `@Input()` data               |
+| `ngOnDestroy`     | Unsubscribe from Observables, clear timers     |
+| `ngAfterViewInit` | Access DOM elements with `@ViewChild`          |
+| `ngDoCheck`       | Avoid unless custom change detection is needed |
+
+---
