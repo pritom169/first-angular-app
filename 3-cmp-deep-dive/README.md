@@ -962,3 +962,15 @@ If the setInterval function was dependent on some input component, the function 
 In order to make sure, the funciton `setInterval()` runs only after the all the input value gets initialized we have to input a lifecycle hook, `ngOnInit()`. Inside the ngOnInit() we will paste the setInterval function.
 
 It will not necesarily change the course of the applicaiton, but it makes sure all the inputs have been initialized first in order to run all the funtions properly.
+
+## Implemneting Lifecylce Interfaces
+
+Problem: server-status component file has ngOnIt() function, however if we change it to ngonIt(), the compiler will not show any error, as angular allows any name methods to be implemented inside component class.
+
+Solution: In order to catch this error we need to implement OnInit interface which will force us to use ngOnInit(), otherwise it will show an error
+
+```ts
+export class ServerStatusComponent implements OnInit {
+  // Rest of the code goes here
+}
+```
