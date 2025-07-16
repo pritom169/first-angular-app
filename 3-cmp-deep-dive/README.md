@@ -605,3 +605,54 @@ You could easily extend this pattern:
 ```
 
 This `ControlComponent` demonstrates how content projection creates **composable, reusable UI patterns** that enhance developer experience while maintaining the flexibility and semantic correctness of native HTML elements.
+
+## Configuiring View Encapsulation
+
+Let's add this CSS to `control.component.css`.
+
+```css
+.control label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 0.15rem;
+  color: #4f4b53;
+}
+
+.control input,
+.control textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font: inherit;
+  font-size: 0.9rem;
+  color: #4f4b53;
+}
+```
+
+Now let's change the class inside the component class,
+
+```html
+<!-- control.component.html -->
+<p class="control">
+  <label>{{ label() }}</label>
+  <ng-content select="input, textarea" />
+</p>
+```
+
+If we run the project, we see only the change in the label but not in the inputs. In Angular when we write CSS inside a component, the CSS styling is enclosed in the component. In order to make it universal such that the child component of 'app-control' can also have the effect of styling, we need to go to `control.component.ts` and change the encapsulation criteria.
+
+```ts
+//control.component.ts
+@Component({
+  selector: 'app-control',
+  imports: [],
+  standalone: true,
+  templateUrl: './control.component.html',
+  styleUrl: './control.component.css',
+  encapsulation: ViewEncapsulation.None
+})
+```
+
+As a result, the content which will be projected in the place of <ng-content> will now have the styling effect inside the control component
