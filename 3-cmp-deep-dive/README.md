@@ -928,3 +928,37 @@ In browser it would be generated as
   <p>All systems are operational.</p>
 </div>
 ```
+
+## Component Lifecycle
+
+### ngOnInit
+
+Let's put a interval funciton inside the constructor. Here is the sample code.
+
+```ts
+//server-status.component.ts
+export class ServerStatusComponent {
+  currentStatus: "online" | "offline" | "unknown" = "online";
+
+  constructor() {
+    setInterval(() => {
+      const randomNum = Math.random();
+      if (randomNum < 0.33) {
+        this.currentStatus = "online";
+      } else if (randomNum < 0.66) {
+        this.currentStatus = "offline";
+      } else {
+        this.currentStatus = "unknown";
+      }
+    }, 5000);
+  }
+}
+```
+
+Everytime the ServerStatusComponent class gets initialized, this function will run. However, there is another problem.
+
+If the setInterval function was dependent on some input component, the function would not have worked properly.
+
+In order to make sure, the funciton `setInterval()` runs only after the all the input value gets initialized we have to input a lifecycle hook, `ngOnInit()`. Inside the ngOnInit() we will paste the setInterval function.
+
+It will not necesarily change the course of the applicaiton, but it makes sure all the inputs have been initialized first in order to run all the funtions properly.
