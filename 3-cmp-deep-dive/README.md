@@ -1308,3 +1308,49 @@ If we want to extract the template variable values inside the template, we can s
   <!-- Rest of the code -->
 </form>
 ```
+
+## Template Reference Variable
+
+When you assign a **template reference variable (`#var`)** to a **component**, you're not referencing the HTML element in the DOM — you're referencing the **Angular component instance itself**.
+
+---
+
+### 🔹 Example 1: Template Variable on a Native Element
+
+```html
+<input #inputRef />
+```
+
+- `#inputRef` points to the **HTMLInputElement**
+- You can access `.value`, `.focus()`, etc.
+
+---
+
+### 🔹 Example 2: Template Variable on a Component
+
+```html
+<app-control #ctrlRef></app-control>
+```
+
+- `#ctrlRef` points to the **`ControlComponent` class instance** (not an HTML element)
+- You can access **public methods/properties** defined in `ControlComponent`, like:
+
+```ts
+ctrlRef.someMethod(); // ✅
+ctrlRef.nativeElement; // ❌ (doesn't exist unless you expose it)
+```
+
+---
+
+Please look at the code from `new-ticket.component.html`,
+
+```html
+<p>
+  <button app-button #btn>
+    Submit
+    <span ngProjectAs="icon">→</span>
+  </button>
+</p>
+```
+
+#btn will not give us access to the HTMLElemenet, rather it will give access to the app-button component.
