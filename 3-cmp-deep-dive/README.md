@@ -1246,3 +1246,17 @@ export class MyComponent {
 - ✅ Works in **signals**, **injectables**, and **effects**
 
 ---
+
+## ngSubmit
+
+ngSubmit is an Angular directive used on <form> elements. It triggers an event when the form is submitted.
+
+```html
+<form (ngSubmit)="onSubmit()"></form>
+```
+
+How it works:
+
+1. It only works with Angular forms.
+2. It prevents the default HTML form submission.
+3. It calls the method in your component (onSubmit()).
