@@ -1260,3 +1260,29 @@ How it works:
 1. It only works with Angular forms.
 2. It prevents the default HTML form submission.
 3. It calls the method in your component (onSubmit()).
+
+## Template variable
+
+### ✅ Template Variable in Angular — Context of Your Code
+
+In Angular, a **template variable** (also called a **template reference variable**) is a way to **reference a DOM element or component** in your template and pass it around — typically to your component logic.
+
+---
+
+### 🔹 In the Code:
+
+```html
+<input name="title" id="title" #inputTitle />
+```
+
+Here, `#inputTitle` is a **template variable**.
+
+---
+
+### 🔍 What it does:
+
+- Declares a **reference to the `<input>` element**.
+- Makes the DOM element accessible **within the same template**.
+- You can use it to **pass the element** (or its value) to a method.
+
+---
