@@ -1286,3 +1286,25 @@ Here, `#inputTitle` is a **template variable**.
 - You can use it to **pass the element** (or its value) to a method.
 
 ---
+
+## Extracting values from template variables
+
+If we want to extract the template variable values inside the template, we can simply type `templateViable.value`. The code from `new-ticket.component.html` will explain it better.
+
+```html
+<form (ngSubmit)="onSubmit(inputTitle.value, inputText.value)">
+  <app-control [label]="'Title'">
+    <input name="title" id="title" #inputTitle />
+  </app-control>
+
+  <app-control [label]="'Description'">
+    <textarea
+      name="description"
+      id="description"
+      rows="3"
+      #inputText
+    ></textarea>
+  </app-control>
+  <!-- Rest of the code -->
+</form>
+```
