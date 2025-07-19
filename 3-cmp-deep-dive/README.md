@@ -1354,3 +1354,43 @@ Please look at the code from `new-ticket.component.html`,
 ```
 
 #btn will not give us access to the HTMLElemenet, rather it will give access to the app-button component.
+
+## TRV with @ViewChild
+In your code, `@ViewChild('form') form?: ElementRef<HTMLFormElement>;` is used to get a **reference to the `<form>` element in the DOM**, allowing direct interaction with it in the `NewTicketComponent` class.
+
+---
+
+### 🧠 Here's what's happening step by step:
+
+#### 1. **Template Reference Variable**
+
+In your HTML:
+
+```html
+<form (ngSubmit)="onSubmit(inputTitle.value, inputText.value)" #form>
+```
+
+* The `#form` is a **template reference variable**.
+* This reference is pointing to the **native `<form>` HTML element**.
+
+---
+
+#### 2. **@ViewChild in the Component**
+
+```ts
+@ViewChild('form') form?: ElementRef<HTMLFormElement>;
+```
+
+* This tells Angular: “After the view has been initialized, find the element with template variable `#form` and assign it to this property.”
+* It returns an `ElementRef`, which wraps the native DOM element (`HTMLFormElement` here).
+* `ElementRef.nativeElement` gives you the actual DOM node.
+
+---
+
+#### 3. **Using `form.nativeElement.reset()`**
+
+```ts
+this.form?.nativeElement.reset();
+```
+
+* This uses the native HTML form API to reset the form: it **clears all input and textarea values** back to their initial state.
