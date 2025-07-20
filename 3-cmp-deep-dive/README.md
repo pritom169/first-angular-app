@@ -1422,7 +1422,7 @@ This is a **function-style signal-based API**, where:
 
 ---
 
-## 🔍 What Is `viewChild()`?
+### 🔍 What Is `viewChild()`?
 
 This is a **reactive signal API** provided by Angular to make querying DOM or component references **reactive and lazy**.
 
@@ -1437,9 +1437,66 @@ This is a **reactive signal API** provided by Angular to make querying DOM or co
 
 ---
 
-## ⚙️ When Does It Work?
+### ⚙️ When Does It Work?
 
 * Like the old `@ViewChild`, this still becomes available **after view initialization** (typically in or after `ngOnInit()`).
 * But since you're calling `this.form()` **on submit**, you’re safe — it will already be initialized.
 
 ---
+
+## ViewChild vs ContentChild
+### **ViewChild Example** (NewTicketComponent)
+```typescript
+// new-ticket.component.ts
+private form = viewChild.required<ElementRef<HTMLFormElement>>('form');
+```
+```html
+<!-- new-ticket.component.html -->
+<form #form>  <!-- OWNS this element -->
+  <app-control>...</app-control>
+</form>
+```
+
+**What happens:**
+- Searches **its own template**
+- Finds the `<form>` element with `#form`
+- NewTicketComponent **owns** and **controls** this form
+
+---
+
+### **ContentChild Example** (ControlComponent)
+```typescript
+// control.component.ts
+private control = contentChild<ElementRef<HTMLInputElement>>('input');
+```
+```html
+<!-- control.component.html -->
+<label>{{ label() }}</label>
+<ng-content select="input, textarea" />  <!-- RECEIVES projected content -->
+```
+```html
+<!-- new-ticket.component.html (parent) -->
+<app-control>
+  <input #input />  <!-- GIVES this element to ControlComponent -->
+</app-control>
+```
+
+**What happens:**
+- Searches **projected content from parent**
+- Finds the `<input>` element with `#input` that was passed in
+- ControlComponent **receives** this element but doesn't own it
+
+---
+
+### **The Key Difference**
+
+| Aspect | ViewChild | ContentChild |
+|--------|-----------|--------------|
+| **Searches In** | Own template | Projected content |
+| **Ownership** | Component owns the element | Parent owns, component receives |
+| **Direction** | Internal (self) | External (from parent) |
+| **Your Example** | Form owns `#form` | Control receives `#input` |
+
+**Think of it as:**
+- **ViewChild**: "I'm looking for my own stuff"
+- **ContentChild**: "I'm looking for what you gave me"
