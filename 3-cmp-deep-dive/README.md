@@ -1394,3 +1394,52 @@ this.form?.nativeElement.reset();
 ```
 
 * This uses the native HTML form API to reset the form: it **clears all input and textarea values** back to their initial state.
+
+## TRV with Signal based viewChild
+### ✅ Old Way (commented out)
+
+```ts
+// @ViewChild('form') form?: ElementRef<HTMLFormElement>;
+```
+
+* This is the **classic decorator-based API**, used before Angular 17.
+* You’d access `this.form?.nativeElement` once the view is initialized (after `ngAfterViewInit()`).
+
+---
+
+### ✅ New Way (signal-based, Angular 17+)
+
+```ts
+private form = viewChild.required<ElementRef<HTMLFormElement>>('form');
+```
+
+This is a **function-style signal-based API**, where:
+
+* `viewChild` is a **function**, not a decorator.
+* `viewChild.required()` ensures the DOM reference **must exist**, or it throws an error.
+* `this.form()` gives the current value (like accessing a signal).
+* The value is the `ElementRef<HTMLFormElement>`.
+
+---
+
+## 🔍 What Is `viewChild()`?
+
+This is a **reactive signal API** provided by Angular to make querying DOM or component references **reactive and lazy**.
+
+### Here's how it works:
+
+| Concept                  | Purpose                                                             |
+| ------------------------ | ------------------------------------------------------------------- |
+| `viewChild()`            | Returns a **signal** that references the DOM element/component      |
+| `.required<T>()`         | Enforces that the reference **must exist**, helpful for debugging   |
+| `this.form()`            | You call it like a function to get the current value (like signals) |
+| `.nativeElement.reset()` | Direct DOM call to reset the form (same as before)                  |
+
+---
+
+## ⚙️ When Does It Work?
+
+* Like the old `@ViewChild`, this still becomes available **after view initialization** (typically in or after `ngOnInit()`).
+* But since you're calling `this.form()` **on submit**, you’re safe — it will already be initialized.
+
+---
