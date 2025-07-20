@@ -1500,3 +1500,72 @@ private control = contentChild<ElementRef<HTMLInputElement>>('input');
 **Think of it as:**
 - **ViewChild**: "I'm looking for my own stuff"
 - **ContentChild**: "I'm looking for what you gave me"
+
+## Decorator based queries and Lifecycle Hooks
+## Decorator-Based Queries vs Signal-Based (Your Code Uses Signals)
+
+Your code uses **modern signal-based queries**, but let me explain the **decorator-based approach** with lifecycle hooks using your same structure:
+
+### **@ViewChild + ngAfterViewInit Example**
+```typescript
+// new-ticket.component.ts (Decorator version)
+export class NewTicketComponent implements AfterViewInit {
+  @ViewChild('form') form?: ElementRef<HTMLFormElement>;  // Decorator approach
+  
+  ngAfterViewInit() {
+    // form reference is NOW available
+    console.log('Form element:', this.form?.nativeElement);
+    // Can safely manipulate the form here
+  }
+  
+  onSubmit() {
+    this.form?.nativeElement.reset();  // Safe to use after ngAfterViewInit
+  }
+}
+```
+
+**Why ngAfterViewInit?**
+- Component's own template (`#form`) is fully rendered
+- DOM elements are created and accessible
+- **Before this hook**: `this.form` would be `undefined`
+
+---
+
+### **@ContentChild + ngAfterContentInit Example**
+```typescript
+// control.component.ts (Decorator version)
+export class ControlComponent implements AfterContentInit {
+  @ContentChild('input') control?: ElementRef<HTMLInputElement>;  // Decorator approach
+  
+  ngAfterContentInit() {
+    // Projected input reference is NOW available
+    console.log('Projected input:', this.control?.nativeElement);
+    // Can safely interact with the projected input here
+  }
+  
+  onClick() {
+    this.control?.nativeElement.focus();  // Safe to use after ngAfterContentInit
+  }
+}
+```
+
+**Why ngAfterContentInit?**
+- Projected content (`<input #input>`) from parent is processed
+- `<ng-content>` projection is complete
+- **Before this hook**: `this.control` would be `undefined`
+
+---
+
+## **Lifecycle Timing**
+
+```
+Component Creation
+      ↓
+Content Projection (@ContentChild available)
+      ↓
+ngAfterContentInit() ← ContentChild references ready
+      ↓
+View Rendering (@ViewChild available)
+      ↓
+ngAfterViewInit() ← ViewChild references ready
+```
