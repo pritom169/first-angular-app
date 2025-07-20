@@ -1569,3 +1569,42 @@ View Rendering (@ViewChild available)
       ↓
 ngAfterViewInit() ← ViewChild references ready
 ```
+
+## afterRender and afterNextRender
+**When afterRender runs:**
+- After every render cycle (very frequent)
+- When you type in the input
+- When you click to focus
+- When parent component updates
+- **Use case**: Monitoring DOM state, syncing with third-party libraries
+
+---
+
+**When afterNextRender runs:**
+- ONLY once after the next render cycle
+- Perfect for initialization tasks
+- **Use case**: Setting up event listeners, auto-focus, third-party integrations
+
+---
+
+## **Comparison with Lifecycle Hooks**
+
+```typescript
+export class ControlComponent {
+  constructor() {
+    afterNextRender(() => {
+      // Same as ngAfterViewInit
+      console.log('Component initialized');
+    });
+    
+    afterRender(() => {
+      // Same as ngAfterViewChecked
+      console.log('View checked');
+    });
+  }
+}
+```
+
+**Key Difference:**
+- `afterRender`: "Do this every time DOM updates"
+- `afterNextRender`: "Do this once when DOM is ready"
