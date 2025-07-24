@@ -1,16 +1,11 @@
-<h2>Authenticate to access all resources</h2>
-<form (ngSubmit)="onSubmit()">
-  <p>
-    <label>E-Mail</label>
-    <input type="email" name="email" [(ngModel)]="email" />
-  </p>
+<main>
+  <app-learning-resources />
 
-  <p>
-    <label>Password</label>
-    <input type="password" name="password" [(ngModel)]="password" />
-  </p>
+  <hr />
 
-  <p>
-    <button>Login</button>
-  </p>
-</form>
+  <app-auth />
+
+  @if (isAdmin()) {
+  <p>Only admins should see this!</p>
+  }
+</main>

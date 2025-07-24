@@ -13,3 +13,7 @@ If we look at the DOM elements, ngModel adds many css classes. Thus two way bind
 In other words, ngModel allows to enhance the input fields.
 
 ngModel is also a perfect example of attribute directive which change the appearance or behavior of an element, component, or another directive.
+
+### 2. Structural Directive
+
+In modern day angular (After Angular 17), there are not many structural directives left. However, directives like ngFor, ngIf are called structural directive.
