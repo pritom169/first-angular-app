@@ -93,3 +93,17 @@ Now can put the query param into <a> element, just how we passed input variables
   >
 </li>
 ```
+
+---
+
+Now let's assume you want to simplify the process even more. You want the query param as the name of your directive and just pass it in the following manner and it still works.
+
+```html
+<li>
+  <a href="https://angular.dev" appSafeLink="myapp-docs-link"
+    >Angular Documentation</a
+  >
+</li>
+```
+
+We can do it by simply adding an alias to the input `queryParam = input('myapp', {alias: 'appSafeLink'});`. Inside the component directive the input will be named as queryParam, but outside where the directive will be used the param will be `appSafeLink`
