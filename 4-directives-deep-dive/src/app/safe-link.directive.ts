@@ -4,7 +4,7 @@ import { Directive } from "@angular/core";
     selector: 'a[appSafeLink]',
     standalone: true,
     host: {
-        'click': 'onConfirmLeavePage($event)'
+        '(click)': 'onConfirmLeavePage($event)'
     }
 })
 export class SafeLinkDirective {
