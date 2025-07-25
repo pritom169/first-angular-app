@@ -54,3 +54,42 @@ export class SafeLinkDirective {
 ```
 
 Once the Directive has been created, we need to import it where we want to properly use it. Hence in the `learning-resources.component.html` we have imported `SafeLinkDirective`. After that we can mention the selector inside the <a> tag in the template file.
+
+#### Applying custom query parameter in the custom directive
+
+When we want to add custom query parameter in the link we can add it dynamically in the directive. Just like component we can add inputs into our custom directive.
+
+```ts
+// safe-link.directive.ts
+export class SafeLinkDirective {
+  queryParam = input("myapp");
+
+  constuctor() {
+    console.log("SafeLinkDirective is active");
+  }
+
+  onConfirmLeavePage(event: MouseEvent) {
+    const wantsToLeave = window.confirm("Do you want to leave this app?");
+
+    if (wantsToLeave) {
+      const address = (event.target as HTMLAnchorElement).href;
+      (event.target as HTMLAnchorElement).href =
+        address + "?from=" + this.queryParam();
+      return;
+    }
+
+    event?.preventDefault();
+  }
+}
+```
+
+Now can put the query param into <a> element, just how we passed input variables in componennt.
+
+```html
+<!-- learning-resouces.component.html -->
+<li>
+  <a href="https://angular.dev" appSafeLink [queryParam]="'myapp-docs-link'"
+    >Angular Documentation</a
+  >
+</li>
+```
