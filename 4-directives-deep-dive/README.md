@@ -107,3 +107,24 @@ Now let's assume you want to simplify the process even more. You want the query 
 ```
 
 We can do it by simply adding an alias to the input `queryParam = input('myapp', {alias: 'appSafeLink'});`. Inside the component directive the input will be named as queryParam, but outside where the directive will be used the param will be `appSafeLink`
+
+### Directives and Dependency Injection
+
+In the previous approach, we have accessed the link through this method,
+
+```ts
+const address = (event.target as HTMLAnchorElement).href;
+(event.target as HTMLAnchorElement).href =
+  address + "?from=" + this.queryParam();
+return;
+```
+
+Now let's try a better approach
+
+```ts
+private hostElementRef = inject<ElementRef<HTMLAnchorElement>>(ElementRef);
+const address = this.hostElementRef.nativeElement.href;
+this.hostElementRef.nativeElement.href = address + '?from=' + this.queryParam();
+```
+
+Through this approach we are injecting dependency which makes it much easier to write test. In addition to that, we are also using Typesafety rather than casting it as HTMLAnchorElement.
