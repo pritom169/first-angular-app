@@ -18,7 +18,7 @@ ngModel is also a perfect example of attribute directive which change the appear
 
 In modern day angular (After Angular 17), there are not many structural directives left. However, directives like ngFor, ngIf are called structural directive.
 
-### 3. Custom Directive
+### 3. Building a custom attribute directive
 
 Let's talk about building a custom directive. Let's create a file where we will follow the Angular's naming convention will be followed `directive-name.directive.ts`. We will name our file to `safe-link.directive.ts`.
 
@@ -128,3 +128,11 @@ this.hostElementRef.nativeElement.href = address + '?from=' + this.queryParam();
 ```
 
 Through this approach we are injecting dependency which makes it much easier to write test. In addition to that, we are also using Typesafety rather than casting it as HTMLAnchorElement.
+
+### Building a custom structural directive
+
+We can generate a new directive using `ng g d auth/auth --skip-tests`. In the new directive we will create an input variable with alias and will also inject **AuthService** into it.
+
+Inside the constructor variable, we will include an effect funciton as it will have a reactive relation with the signal value. Thus when the value of userType changes and the effect funcitons get called.
+
+Last but not the least, in order to see the change, we need to import that in the appcomponent and in the template file simply write `<p appAuth="admin">Only admins should see this!</p>`.
