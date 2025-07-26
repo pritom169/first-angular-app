@@ -203,3 +203,21 @@ In order to use it, we will first import it in the `learning-resources.component
 ```
 
 We can also do the same in appcomponent.
+
+---
+
+As we have seen in order to add it into log, we have to follow a cumbersome procedure. We have to first import it and then add it inside the tag.
+
+However we can get around that. We can simply add to the host component using hostDirective. Code for more reference.
+
+```ts
+//auth.component.ts
+@Component({
+  selector: 'app-auth',
+  standalone: true,
+  imports: [FormsModule],
+  templateUrl: './auth.component.html',
+  styleUrl: './auth.component.css',
+  hostDirectives: [LogDirective]
+})
+```

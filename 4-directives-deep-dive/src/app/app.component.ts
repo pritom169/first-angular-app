@@ -11,7 +11,7 @@ import { LogDirective } from './log.directive';
   standalone: true,
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  imports: [AuthComponent, LearningResourcesComponent, AuthDirective, LogDirective],
+  imports: [AuthComponent, LearningResourcesComponent, AuthDirective],
 })
 export class AppComponent {
   private authService = inject(AuthService);

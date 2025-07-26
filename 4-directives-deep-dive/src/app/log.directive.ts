@@ -4,14 +4,15 @@ import { Directive, ElementRef, inject } from '@angular/core';
   selector: '[appLog]',
   standalone: true,
   host: {
-    'click': 'onLog()'
+    '(click)': 'onLog()'
   }
 })
 export class LogDirective {
   private elementRef = inject(ElementRef);
 
-  constructor() {
-    console.log('CLICKED')
-    console.log(this.elementRef. nativeElement)
+  constructor() {}
+
+  onLog() {
+    console.log('LOG DIRECTIVE CLICKED');
   }
 }
