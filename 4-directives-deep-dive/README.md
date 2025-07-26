@@ -188,3 +188,18 @@ There is a syntectical sugar, we can replace <ng-content> by. Here is a short de
   Only admins should see this!
 </p>
 ```
+
+### Log Directive
+
+Let's create a directive whose responsiblity will be to log when it gets initialized. We will create the directive by using the `ng g d log --skip-tests`. In the directive, we will add a click listener to the host.
+
+In order to use it, we will first import it in the `learning-resources.component.ts` file and afterwards we embedd it inside a tag,
+
+```html
+<!-- learning-resources.component.html -->
+<p appLog>
+  Helpful resources you might want to use in addition to this course.
+</p>
+```
+
+We can also do the same in appcomponent.
