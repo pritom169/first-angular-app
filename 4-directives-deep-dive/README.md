@@ -136,3 +136,44 @@ We can generate a new directive using `ng g d auth/auth --skip-tests`. In the ne
 Inside the constructor variable, we will include an effect funciton as it will have a reactive relation with the signal value. Thus when the value of userType changes and the effect funcitons get called.
 
 Last but not the least, in order to see the change, we need to import that in the appcomponent and in the template file simply write `<p appAuth="admin">Only admins should see this!</p>`.
+
+### ng-template
+
+In Angular, `ng-template` is a structural element that defines a template block of HTML which is not redered directly to the DOM unless explicitly told to do so by Angular.
+
+In our case we are using custom directive `appAuth`, which controls whether or not the content inside <ng-template> is rendered based on the user's permission.
+
+```html
+<!-- app.component.html -->
+<ng-template appAuth="admin">
+  <p>Only admins should see this text!</p>
+</ng-template>
+```
+
+In the `auth.directive.ts`, the code look like
+
+```ts
+export class AuthDirective {
+  userType = input.required<Permission>({ alias: "appAuth" });
+  private authService = inject(AuthService);
+  private templateRef = inject(TemplateRef);
+  private viewContainerRef = inject(ViewContainerRef);
+
+  constructor() {
+    effect(() => {
+      if (this.authService.activePermission() === this.userType()) {
+        this.viewContainerRef.createEmbeddedView(this.templateRef);
+      } else {
+        this.viewContainerRef.clear();
+      }
+    });
+  }
+}
+```
+
+Let's look at this code. We have injected two properties
+
+1. **TemplateRef** - TemplateRef represents the template block (the <ng-template> contents) — it’s a reference to the HTML we want to conditionally render.
+2. **ViewContainerref** - ViewContainerRef is the placeholder in the DOM where Angular will insert or clear views.
+
+As a result, when the directive gets initialized, the viewContainerRef initially clears the DOM and when the user input changes it renders it according to the rule.
