@@ -177,3 +177,14 @@ Let's look at this code. We have injected two properties
 2. **ViewContainerref** - ViewContainerRef is the placeholder in the DOM where Angular will insert or clear views.
 
 As a result, when the directive gets initialized, the viewContainerRef initially clears the DOM and when the user input changes it renders it according to the rule.
+
+---
+
+There is a syntectical sugar, we can replace <ng-content> by. Here is a short demo. We simply put `*` before the directive identifier and we have to pass the input value inside a single quotation mark.
+
+```html
+<!-- app.component.html -->
+<p *appAuth="'admin'" class="protected-content admin">
+  Only admins should see this!
+</p>
+```
